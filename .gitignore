@@ -36,4 +36,7 @@ out/
 ### VS Code ###
 .vscode/
 
+### 추가 ###
 application-aws.properties
+application.yml
+applocation.properties
