@@ -36,18 +36,12 @@ public class AddressController {
         return new ResponseEntity<>(updateAddressDTO, HttpStatus.OK);
     }
 
-    /* 주소지 기본 배송지로 설정 */
-    @PutMapping("/{addressId}/set-default")
+    /* 기본 주소지 설정 및 나머지는 기본 주소지 해제 */
+    @PutMapping("/{addressId}/default")
     public ResponseEntity<String> setDefaultAddress(@PathVariable Long addressId) {
-        addressService.setDefault(addressId);
+        Long userId = 1L; // 임의로 정함, 나중에는 로그인 후 사용자 식별해서 보낼 것
+        addressService.setDefault(userId, addressId);
         return new ResponseEntity<>("기본 배송지 설정이 되었습니다.", HttpStatus.OK);
-    }
-
-    /* 주소지 기본 배송지 해제 */
-    @PutMapping("/{addressId}/unset-default")
-    public ResponseEntity<String> unsetDefaultAddress(@PathVariable Long addressId) {
-        addressService.unsetDefault(addressId);
-        return new ResponseEntity<>("기본 배송지 설정이 해제 되었습니다.", HttpStatus.OK);
     }
 
     /* 주소지 삭제 */

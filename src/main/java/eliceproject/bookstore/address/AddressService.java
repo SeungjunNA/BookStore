@@ -51,15 +51,21 @@ public class AddressService {
     }
 
     @Transactional
-    public void setDefault(Long addressId) {
-        Address defaultAddress = findById(addressId);
-        defaultAddress.setDefault();
-    }
+    public void setDefault(Long userId, Long addressId) {
+        try {
+            log.info("setDefault 실행");
 
-    @Transactional
-    public void unsetDefault(Long addressId) {
-        Address defaultAddress = findById(addressId);
-        defaultAddress.unsetDefault();
+            List<Address> undefaultAddressList = findByUser(userId);
+            for (Address address : undefaultAddressList) {
+                address.unsetDefault();
+            }
+
+            Address defaultAddress = findById(addressId);
+            defaultAddress.setDefault();
+        } catch (Exception e) {
+            log.error("setDefault 트랜잭션 롤백 발생: " + e.getMessage());
+            throw e;
+        }
     }
 
     @Transactional
