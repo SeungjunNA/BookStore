@@ -6,6 +6,7 @@
 .contents-wrap {
     width: 100%;
     display: flex;
+    align-items: center;
 }
 
 .side {
@@ -65,8 +66,35 @@
 .order-list-contents {
     list-style-type: none;
     margin-left: 20px;
+    font-size: 11px;
+    font-weight: 400;
 }
 
 .order-list-deliver-wrap {
     margin-left: 20px;
+}
+
+.order-list-price {
+    color: black;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.order-list-deliver-wrap > button {
+    background-color: #B0C2FF;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.deliver-status {
+    color: black;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.deliver-status-date {
+    color: #484848;
+    font-size: 12px;
+    font-weight: 400;
 }
