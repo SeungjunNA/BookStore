@@ -26,7 +26,10 @@ document.addEventListener("DOMContentLoaded", function () {
         })
             .then(response =>{
                 if(!response.ok){
-                    throw new Error(response.text());
+                    response.text().then(errorMessage=>{
+                        errorContainer.textContent = errorMessage;
+                        throw new Error(errorMessage);
+                    })
                 }
                 return response.text();
             })
@@ -37,7 +40,6 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(error => {
                 // 에러 처리, 필요에 따라 사용자에게 에러 메시지를 표시할 수 있습니다.
                 console.error("회원가입 실패:", error);
-                errorContainer.textContent = error;
             });
     });
 });

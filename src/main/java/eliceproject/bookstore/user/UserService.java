@@ -1,13 +1,13 @@
 package eliceproject.bookstore.user;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.security.auth.login.AccountNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -49,5 +49,21 @@ public class UserService {
         if(user != null){
             throw new IllegalStateException("중복되는 아이디가 있습니다.");
         }
+    }
+
+    public String findUsername(UserDto userDto) {
+        User user = userRepository.findByNameAndEmail(userDto.getName(), userDto.getEmail());
+        if(user == null){
+            throw new IllegalStateException("이름과 이메일을 정확히 입력해주세요.");
+        }
+        return user.getUsername();
+    }
+
+    public String findPassword(UserDto userDto) {
+        User user = userRepository.findByNameAndUsernameAndEmail(userDto.getName(), userDto.getUsername(), userDto.getEmail());
+        if(user == null){
+            throw new IllegalStateException("이름과 아이디와 이메일을 정확히 입력해주세요.");
+        }
+        return user.getPassword();
     }
 }

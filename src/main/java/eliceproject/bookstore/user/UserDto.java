@@ -2,6 +2,7 @@ package eliceproject.bookstore.user;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,6 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class UserDto {
 
     @NotBlank(message = "아이디는 필수 입력 값입니다.")
@@ -34,6 +36,10 @@ public class UserDto {
     private String birthday;
 
 
+    public UserDto(String name, String email){
+        this.name  = name;
+        this.email = email;
+    }
     public User toUser(){
         return new User(username, password, username, email, mobileNumber, birthday);
     }
