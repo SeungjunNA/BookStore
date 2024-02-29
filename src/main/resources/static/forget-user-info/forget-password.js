@@ -12,6 +12,9 @@ document.addEventListener("DOMContentLoaded", function () {
             email: document.getElementById("email").value
         };
 
+        errorContainer.textContent = "";
+        resultContainer.textContent = "";
+
         fetch("/forget-password", {
             method: "POST",
             headers: {

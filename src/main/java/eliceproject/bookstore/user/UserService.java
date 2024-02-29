@@ -2,10 +2,8 @@ package eliceproject.bookstore.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -13,6 +11,7 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public User save(UserDto userDto) {
         validateDuplicateUserName(userDto);
@@ -20,7 +19,10 @@ public class UserService {
         validateDuplicateEmail(userDto);
         validateDuplicateMobileNumber(userDto);
 
-        User user = userDto.toUser();
+        User user = userDto.toEntity();
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole(User.Role.USER);
+
         return userRepository.save(user);
     }
 
@@ -66,4 +68,5 @@ public class UserService {
         }
         return user.getPassword();
     }
+
 }

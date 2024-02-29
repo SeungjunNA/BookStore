@@ -22,6 +22,7 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody @Valid UserDto userDto, BindingResult bindingResult) {
+        log.info(userDto.toString());
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = new HashMap<>();
             bindingResult.getAllErrors().forEach(error -> {
@@ -58,7 +59,5 @@ public class UserController {
         }catch (IllegalStateException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-
     }
-
 }

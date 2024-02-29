@@ -16,6 +16,8 @@ document.addEventListener("DOMContentLoaded", function () {
             birthday: document.getElementById("birthday").value,
         };
 
+        errorContainer.textContent = "";
+
         // 회원가입 엔드포인트에 API 호출
         fetch("/register", {
             method: "POST",

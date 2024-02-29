@@ -35,12 +35,7 @@ public class UserDto {
     @Pattern(regexp = "^\\d{8}$", message = "생년월일 8자리를 입력해주세요.")
     private String birthday;
 
-
-    public UserDto(String name, String email){
-        this.name  = name;
-        this.email = email;
-    }
-    public User toUser(){
-        return new User(username, password, username, email, mobileNumber, birthday);
+    public User toEntity(){
+        return new User(username, password, name, email, mobileNumber, birthday);
     }
 }

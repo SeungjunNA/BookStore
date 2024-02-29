@@ -11,6 +11,9 @@ document.addEventListener("DOMContentLoaded", function () {
             email: document.getElementById("email").value
         };
 
+        errorContainer.textContent = "";
+        resultContainer.textContent = "";
+
         fetch("/forget-username", {
             method: "POST",
             headers: {
