@@ -1,5 +1,6 @@
 package eliceproject.bookstore.order;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import eliceproject.bookstore.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,12 +8,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Getter
+@Table(name="orders")
+@Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class Order {
@@ -22,20 +24,21 @@ public class Order {
     private Long id;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name="user_id")
     private User user;
 
-    @OneToMany(mappedBy = "order")
-    private List<OrderDetail> orderDetailList = new ArrayList<>();
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<OrderBook> orderBookList = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
-    private LocalDate orderDate;
+    private LocalDateTime orderDate;
 
-
-    public void addOrderDetail(OrderDetail orderDetail) {
-        orderDetailList.add(orderDetail);
-        orderDetail.setOrder(this);
+    public void addOrderBook(OrderBook orderBook) {
+        orderBookList.add(orderBook);
+        orderBook.setOrder(this);
     }
 
 }

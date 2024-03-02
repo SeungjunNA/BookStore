@@ -1,33 +1,36 @@
 package eliceproject.bookstore.order;
 
-import eliceproject.bookstore.order.dto.OrderDetailRequest;
+import eliceproject.bookstore.book.Book;
+import eliceproject.bookstore.book.BookRepository;
+import eliceproject.bookstore.order.dto.OrderBookRequest;
 import eliceproject.bookstore.order.dto.OrderRequest;
+import eliceproject.bookstore.user.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
+    private final UserRepository userRepository;
+    private final BookRepository bookRepository;
 
+    @Transactional
     @Override
     public Order create(OrderRequest orderRequest) {
-        return new Order();
-    }
+        Order order = new Order();
+        order.setUser(userRepository.findById(orderRequest.getUserId()).orElseThrow());
 
-    @Override
-    public List<Order> findAll() {
-        return orderRepository.findAll();
-    }
+        for (OrderBookRequest orderBookRequest : orderRequest.getOrderBookRequestList()) {
+            OrderBook orderBook = new OrderBook();
+            orderBook.setOrder(order);
+            orderBook.setBook(bookRepository.findById(orderBookRequest.getBookId()).orElseThrow());
+            order.addOrderBook(orderBook);
+        }
 
-    @Override
-    public Order getOrderDetail(Long orderId) {
-        return orderRepository.findById(orderId)
-                .orElseThrow(() ->  new IllegalArgumentException("Order not found with id : " + orderId));
+        return orderRepository.save(order);
     }
 
 }

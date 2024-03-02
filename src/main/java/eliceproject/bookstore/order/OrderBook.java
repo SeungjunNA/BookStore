@@ -5,12 +5,13 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Getter
+@Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderDetail {
+public class OrderBook {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,11 +26,5 @@ public class OrderDetail {
     private Book book;
 
     private int stock;
-
-
-    public void setOrder(Order order) {
-        this.order = order;
-        order.getOrderDetailList().add(this);
-    }
 
 }

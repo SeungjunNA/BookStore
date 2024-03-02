@@ -8,8 +8,4 @@ public interface OrderService {
 
     Order create(OrderRequest orderRequest);
 
-    List<Order> findAll();
-
-    Order getOrderDetail(Long orderId);
-
 }
