@@ -1,5 +1,6 @@
 package eliceproject.bookstore.order;
 
+import eliceproject.bookstore.book.Book;
 import jakarta.persistence.*;
 
 @Entity
