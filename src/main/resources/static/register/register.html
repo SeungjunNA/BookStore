@@ -18,9 +18,9 @@
     <form class="box register-user-form-box" id="registerUserForm">
         <p class="title is-5">회원가입</p>
 
-        <div id="errorContainer" class="alert alert-danger"></div>
+        <div id="errorContainer" class="text-danger"></div>
 
-        <div class="field">
+        <div class="field mb-0">
             <div class="control">
                 <input
                         class="input"
@@ -31,8 +31,9 @@
                 />
             </div>
         </div>
+        <div id="nameInputErrorMessage" class="text-danger"></div>
 
-        <div class="field">
+        <div class="field mb-0 mt-1">
             <div class="control">
                 <input
                         class="input"
@@ -43,8 +44,9 @@
                 />
             </div>
         </div>
+        <div id="usernameInputErrorMessage" class="text-danger"></div>
 
-        <div class="field">
+        <div class="field mb-0 mt-1">
             <div class="control">
                 <input
                         class="input"
@@ -55,8 +57,9 @@
                 />
             </div>
         </div>
+        <div id="emailInputErrorMessage" class="text-danger"></div>
 
-        <div class="field">
+        <div class="field mb-0 mt-1">
             <div class="control">
                 <input
                         class="input"
@@ -67,8 +70,9 @@
                 />
             </div>
         </div>
+        <div id="passwordInputErrorMessage" class="text-danger"></div>
 
-        <div class="field">
+        <div class="field mb-0 mt-1">
             <div class="control">
                 <input
                         class="input"
@@ -79,8 +83,9 @@
                 />
             </div>
         </div>
+        <div id="passwordConfirmErrorMessage" class="text-danger"></div>
 
-        <div class="field">
+        <div class="field mb-0 mt-1">
             <div class="control">
                 <input
                         class="input"
@@ -91,8 +96,9 @@
                 />
             </div>
         </div>
+        <div id="mobileNumberErrorMessage" class="text-danger"></div>
 
-        <div class="field mb-5">
+        <div class="field mb-0 mt-1">
             <div class="control">
                 <input
                         class="input"
@@ -103,6 +109,7 @@
                 />
             </div>
         </div>
+        <div class="mb-5 text-danger" id="birthdayInputErrorMessage"></div>
 
         <button class="button is-fullwidth btn btn-primary" id="submitButton" type="submit">
             회원가입

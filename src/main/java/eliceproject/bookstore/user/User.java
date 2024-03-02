@@ -1,9 +1,6 @@
 package eliceproject.bookstore.user;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -20,6 +17,8 @@ public class User{
     private String mobileNumber;
     private String birthday;
     private boolean isDeleted;
+
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     public User(String username, String password, String name, String email, String mobileNumber, String birthday) {
