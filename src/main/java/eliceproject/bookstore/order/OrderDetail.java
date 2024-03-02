@@ -2,8 +2,14 @@ package eliceproject.bookstore.order;
 
 import eliceproject.bookstore.book.Book;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrderDetail {
 
     @Id
