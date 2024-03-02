@@ -77,10 +77,6 @@ public class UserController {
 
     @GetMapping("/userPage")
     public String userInfo(Authentication authentication){
-        User user = userServiceImpl.getLoginUserByUsername(authentication);
-
-        System.out.println("authentication = " + authentication);
-
         return "유저페이지";
     }
 }
