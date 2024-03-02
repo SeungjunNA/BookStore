@@ -5,8 +5,11 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,8 +25,17 @@ public class Order {
     @JoinColumn
     private User user;
 
+    @OneToMany(mappedBy = "order")
+    private List<OrderDetail> orderDetailList = new ArrayList<>();
+
     private OrderStatus orderStatus;
 
     private LocalDate orderDate;
+
+
+    public void addOrderDetail(OrderDetail orderDetail) {
+        orderDetailList.add(orderDetail);
+        orderDetail.setOrder(this);
+    }
 
 }

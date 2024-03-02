@@ -1,6 +1,9 @@
 package eliceproject.bookstore.order;
 
+import eliceproject.bookstore.order.dto.OrderDetailRequest;
+import eliceproject.bookstore.order.dto.OrderRequest;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,8 +15,8 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
 
     @Override
-    public Order create(Order order) {
-        return orderRepository.save(order);
+    public Order create(OrderRequest orderRequest) {
+        return new Order();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package eliceproject.bookstore.order;
 
+import eliceproject.bookstore.order.dto.OrderRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +18,8 @@ public class OrderController {
 
     /* 주문 생성 */
     @PostMapping
-    public ResponseEntity<Order> createOrder(@RequestBody Order order) {
-        return new ResponseEntity<>(orderService.create(order), HttpStatus.OK);
+    public ResponseEntity<Order> createOrder(@RequestBody OrderRequest orderRequest) {
+        return new ResponseEntity<>(orderService.create(orderRequest), HttpStatus.OK);
     }
 
 }

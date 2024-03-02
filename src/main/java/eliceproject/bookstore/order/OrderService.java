@@ -1,10 +1,12 @@
 package eliceproject.bookstore.order;
 
+import eliceproject.bookstore.order.dto.OrderRequest;
+
 import java.util.List;
 
 public interface OrderService {
 
-    Order create(Order order);
+    Order create(OrderRequest orderRequest);
 
     List<Order> findAll();
 

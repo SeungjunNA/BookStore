@@ -26,4 +26,10 @@ public class OrderDetail {
 
     private int stock;
 
+
+    public void setOrder(Order order) {
+        this.order = order;
+        order.getOrderDetailList().add(this);
+    }
+
 }
