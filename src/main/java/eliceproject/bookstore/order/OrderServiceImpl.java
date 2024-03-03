@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
@@ -31,6 +33,12 @@ public class OrderServiceImpl implements OrderService {
         }
 
         return orderRepository.save(order);
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<Order> findAll() {
+        return orderRepository.findAll();
     }
 
 }
