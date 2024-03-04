@@ -43,6 +43,7 @@ async function getAddressList() {
         const addressItemHtml = `
             <div class="address-item-wrap">
                 <div class="address-info">
+                    <span id="address-id" style="display: none;">${address['id']}</span>
                     <span>${address['addressName']}</span>
                     ${isDefaultSpan}<br>
                     <span>${address['phoneNumber']}</span><br>
@@ -52,6 +53,7 @@ async function getAddressList() {
                 <div class="address-item-button-wrap">
                     ${defaultAddressBtn}
                     <button class="edit-address-btn" type="submit">수정</button>
+                    <button class="delete-address-btn" type="submit">삭제</button>
                 </div>
             </div>
         `
@@ -59,6 +61,7 @@ async function getAddressList() {
     })
 
     getDefaultAddress(defaultAddress);
+    await setDefaultAddressButtonListeners();
 }
 
 async function addAddress(address){
@@ -77,7 +80,13 @@ async function addAddress(address){
 
 const modal = document.querySelector(".modal");
 const submitBtn = document.querySelector("#submitAddress");
+const closeBtn = document.querySelector(".close");
 const addAddressButton = document.querySelector(".add-address-btn");
+
+closeBtn.addEventListener('click', () => {
+    modal.style.display = "none";
+})
+
 addAddressButton.addEventListener('click', () => {
     modal.style.display = "block";
 });
@@ -94,3 +103,28 @@ submitBtn.addEventListener('click',  () => {
     addAddress(address);
     modal.style.display = "none";
 });
+
+
+async function setDefaultAddressButtonListeners() {
+    const setDefaultAddressBtns = document.querySelectorAll(".set-default-address-btn");
+    console.log(setDefaultAddressBtns);
+    setDefaultAddressBtns.forEach(button => {
+        button.addEventListener('click', async () => {
+            const addressIdElement = button.closest('.address-item-wrap').querySelector('#address-id');
+            const addressId = addressIdElement.textContent;
+
+            const response = await fetch(`/myroom/address/${addressId}/default`, {
+                method: 'PUT',
+            });
+
+            if (response.ok) {
+                const defaultAddress = await response.json();
+                console.log("기본 주소지 설정 성공:", defaultAddress);
+            } else {
+                console.error("기본 주소지 설정 실패:", response.statusText);
+            }
+
+            location.reload();
+        });
+    });
+}
