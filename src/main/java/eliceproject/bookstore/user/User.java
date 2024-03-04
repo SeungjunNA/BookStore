@@ -1,35 +1,36 @@
 package eliceproject.bookstore.user;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String userId;
-    private String password;
     private String username;
+    private String password;
+    private String name;
     private String email;
-    private String phoneNumber;
+    private String mobileNumber;
     private String birthday;
+    private boolean isDeleted;
 
-    public User(String userId, String password, String username, String email, String phoneNumber, String birthday) {
-        this.userId = userId;
-        this.password = password;
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    public User(String username, String password, String name, String email, String mobileNumber, String birthday) {
         this.username = username;
+        this.password = password;
+        this.name = name;
         this.email = email;
-        this.phoneNumber = phoneNumber;
+        this.mobileNumber = mobileNumber;
         this.birthday = birthday;
+    }
+
+    public enum Role{
+        USER, ADMIN
     }
 }

@@ -39,4 +39,4 @@ out/
 ### 추가 ###
 application-aws.properties
 application.yml
-applocation.properties
+application.properties
