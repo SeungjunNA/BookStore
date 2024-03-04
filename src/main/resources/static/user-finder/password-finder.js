@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
         errorContainer.textContent = "";
         resultContainer.textContent = "";
 
-        fetch("/forget-password", {
+        fetch("/password-finder", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

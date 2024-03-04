@@ -1,12 +1,19 @@
 package eliceproject.bookstore.user;
 
+import eliceproject.bookstore.security.CustomUserDetails;
 import eliceproject.bookstore.security.jwt.JwtUtil;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponseWrapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +26,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService userServiceImpl;
+    private final UserService userService;
+
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody @Valid UserDto userDto, BindingResult bindingResult) {
@@ -34,7 +42,7 @@ public class UserController {
         }
 
         try {
-            userServiceImpl.save(userDto);
+            userService.save(userDto);
             return new ResponseEntity<>("user register successfully", HttpStatus.CREATED);
         } catch (IllegalStateException e) {
             errors.put("error", e.getMessage());
@@ -42,20 +50,20 @@ public class UserController {
         }
     }
 
-    @PostMapping("/forget-username")
+    @PostMapping("/username-finder")
     public ResponseEntity<String> findUsername(@RequestBody UserDto userDto){
         try {
-            String username = userServiceImpl.findUsername(userDto);
+            String username = userService.findUsername(userDto);
             return new ResponseEntity<>(username, HttpStatus.OK);
         }catch (IllegalStateException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
 
-    @PostMapping("/forget-password")
+    @PostMapping("/password-finder")
     public ResponseEntity<String> findPassword(@RequestBody UserDto userDto){
         try {
-            String password = userServiceImpl.findPassword(userDto);
+            String password = userService.findPassword(userDto);
             return new ResponseEntity<>(password, HttpStatus.OK);
         }catch (IllegalStateException e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -66,11 +74,14 @@ public class UserController {
     public ResponseEntity<?> login(@RequestBody UserDto userDto){
         String username = userDto.getUsername();
         String password = userDto.getPassword();
-        if(userServiceImpl.login(username, password)){
+        log.info(username + " / " + password);
+        if(userService.login(username, password)){
             long expireTime = 1000 * 60 * 60;
             String jwtToken = JwtUtil.createToken(username, expireTime);
 
-            return new ResponseEntity<>(jwtToken, HttpStatus.OK);
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.AUTHORIZATION, jwtToken)
+                    .body("로그인 성공");
         };
         return new ResponseEntity<>("아이디와 비밀번호를 다시 입력해줏요.", HttpStatus.BAD_REQUEST);
     }
@@ -78,5 +89,15 @@ public class UserController {
     @GetMapping("/userPage")
     public String userInfo(Authentication authentication){
         return "유저페이지";
+    }
+
+    @GetMapping("/edit-user")
+    public ResponseEntity<?> editUserForm(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        String username = (String) authentication.getPrincipal();
+        User user = userService.findByUsername(username);
+        System.out.println("user.toString() = " + user.toString());
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 }

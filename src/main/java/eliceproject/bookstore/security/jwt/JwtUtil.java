@@ -9,8 +9,8 @@ import java.util.Date;
 
 public class JwtUtil {
 
-    @Value("${jwt.secret}")
-    private static String secretKey;
+//    @Value("${jwt.secret}")
+    private static String secretKey = "asdlkfasldfkj123159sa8uq3v482c9128jcac123i4c1m2io";
 
     public static String createToken(String username, long expireTime){
         Claims claims = Jwts.claims();
@@ -36,4 +36,6 @@ public class JwtUtil {
     private static Claims extractClaims(String token){
         return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody();
     }
+
+
 }

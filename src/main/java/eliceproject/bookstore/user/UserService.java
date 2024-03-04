@@ -5,4 +5,5 @@ public interface UserService {
     String findUsername(UserDto userDto);
     String findPassword(UserDto userDto);
     boolean login(String username, String password);
+    User findByUsername(String username);
 }

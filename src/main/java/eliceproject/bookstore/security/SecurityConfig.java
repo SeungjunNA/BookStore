@@ -1,13 +1,17 @@
 package eliceproject.bookstore.security;
 
 import eliceproject.bookstore.security.jwt.JwtFilter;
+import eliceproject.bookstore.user.User;
 import eliceproject.bookstore.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.authentication.AuthenticationManagerFactoryBean;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -27,6 +31,7 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorizeRequest)->authorizeRequest
                         .requestMatchers("/register", "/forget-password", "/forget-username").permitAll()
+                        .requestMatchers("/userPage").hasRole(User.Role.USER.name())
                         .anyRequest().permitAll()
                 )
                 .addFilterBefore(new JwtFilter(userRepository), UsernamePasswordAuthenticationFilter.class)
@@ -40,4 +45,5 @@ public class SecurityConfig {
     public BCryptPasswordEncoder bCryptPasswordEncoder(){
         return new BCryptPasswordEncoder();
     }
+
 }

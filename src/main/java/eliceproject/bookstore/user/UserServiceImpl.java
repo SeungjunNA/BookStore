@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -48,6 +50,13 @@ public class UserServiceImpl implements UserService{
             return bCryptPasswordEncoder.matches(password, user.getPassword());
         }
         return false;
+    }
+    public User findByUsername(String username){
+        User user = userRepository.findByUsername(username);
+        if(user == null){
+            throw new IllegalArgumentException("유저를 찾을 수 없습니다.");
+        }
+        return user;
     }
 
     private void validateDuplicateMobileNumber(UserDto userDto) {
