@@ -33,30 +33,24 @@
         <button>회원정보 수정</button>
     </div>
     <div class="main-wrap">
-        <div class="default-address-wrap">
-            <p>배송주소록</p>
-            <div class="address-info">
-                <span>기본배송지</span>
-                <span>우리집</span><br>
-                <span>조민지</span>/
-                <span>010-1234-5678</span><br>
-                [<span>39333</span>]
-                <span>서울특별시 어디구 어디길</span>
+        <div class="default-address-wrap"></div>
+        <button class="add-address-btn" type="submit">+ 새 주소록 등록</button>
+        <div id="myModal" class="modal">
+            <div class="modal-content">
+                <label for="addressName">주소 이름:</label>
+                <input type="text" id="addressName" name="addressName"><br>
+                <label for="phoneNumber">전화번호:</label>
+                <input type="text" id="phoneNumber" name="phoneNumber"><br>
+                <label for="mainAddress">주소:</label>
+                <input type="text" id="mainAddress" name="mainAddress"><br>
+                <label for="subAddress">상세 주소:</label>
+                <input type="text" id="subAddress" name="subAddress"><br>
+                <label for="zipCode">우편번호:</label>
+                <input type="text" id="zipCode" name="zipCode"><br>
+                <button id="submitAddress">주소록 등록</button>
             </div>
         </div>
-        <div class="address-list-wrap">
-<!--            <div class="address-item-wrap">-->
-<!--                <div class="address-info">-->
-<!--                    <span>기본배송지</span>-->
-<!--                    <span>우리집</span><br>-->
-<!--                    <span>조민지</span>/-->
-<!--                    <span>010-1234-5678</span><br>-->
-<!--                    [<span>39333</span>]-->
-<!--                    <span>서울특별시 어디구 어디길</span>-->
-<!--                </div>-->
-<!--                <button type="submit">수정</button>-->
-<!--            </div>-->
-        </div>
+        <div class="address-list-wrap"></div>
     </div>
 </div>
 </body>
