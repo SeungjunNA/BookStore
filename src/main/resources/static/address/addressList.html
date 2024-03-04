@@ -35,7 +35,7 @@
     <div class="main-wrap">
         <div class="default-address-wrap"></div>
         <button class="add-address-btn" type="submit">+ 새 주소록 등록</button>
-        <div id="myModal" class="modal">
+        <div class="add-modal">
             <div class="modal-content">
                 <label for="addressName">주소 이름:</label>
                 <input type="text" id="addressName" name="addressName"><br>
@@ -47,8 +47,24 @@
                 <input type="text" id="subAddress" name="subAddress"><br>
                 <label for="zipCode">우편번호:</label>
                 <input type="text" id="zipCode" name="zipCode"><br>
-                <button type="submit" id="submitAddress">주소록 등록</button>
-                <button class="close">취소</button>
+                <button class="add-submit" type="submit" id="submitAddress">주소록 등록</button>
+                <button class="add-close">취소</button>
+            </div>
+        </div>
+        <div class="edit-modal">
+            <div class="modal-content">
+                <label for="editAddressName">주소명:</label>
+                <input type="text" id="editAddressName" placeholder="새 주소명"><br>
+                <label for="editPhoneNumber">전화번호:</label>
+                <input type="text" id="editPhoneNumber" placeholder="새 전화번호"><br>
+                <label for="editMainAddress">주소:</label>
+                <input type="text" id="editMainAddress" placeholder="새 주소"><br>
+                <label for="editSubAddress">상세주소:</label>
+                <input type="text" id="editSubAddress" placeholder="새 상세주소"><br>
+                <label for="editZipCode">우편번호:</label>
+                <input type="text" id="editZipCode" placeholder="새 우편번호"><br>
+                <button class="edit-submit">수정하기</button>
+                <button class="edit-close">취소</button>
             </div>
         </div>
         <div class="address-list-wrap"></div>

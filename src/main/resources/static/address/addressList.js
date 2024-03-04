@@ -1,6 +1,8 @@
-document.addEventListener('DOMContentLoaded', getAddressList);
+document.addEventListener('DOMContentLoaded', () => {
+    getAddressList();
+    setEventListeners();
+});
 
-let defaultAddress;
 
 function getDefaultAddress(defaultAddress) {
     const defaultAddressWrap = document.querySelector('.default-address-wrap');
@@ -21,9 +23,9 @@ function getDefaultAddress(defaultAddress) {
 }
 
 async function getAddressList() {
+    let defaultAddress;
     const response = await fetch("/myroom/address");
     const addressList = await response.json();
-
     const addressListWrap = document.querySelector('.address-list-wrap');
     addressListWrap.innerHTML = '';
 
@@ -61,8 +63,62 @@ async function getAddressList() {
     })
 
     getDefaultAddress(defaultAddress);
-    await setDefaultAddressButtonListeners();
-    await deleteAddress();
+    setDefaultAddress();
+    deleteAddress();
+    updateAddressListeners();
+}
+
+
+const editModal = document.querySelector('.edit-modal');
+const editCloseBtn = document.querySelector('.edit-close');
+const editSubmitBtn = document.querySelector('.edit-submit');
+editCloseBtn.addEventListener('click', () => {
+    editModal.style.display = "none";
+});
+
+editSubmitBtn.addEventListener('click', () => {
+    console.log("edit-submit");
+
+    const editAddress = {
+        addressName: document.getElementById("editAddressName").value,
+        phoneNumber: document.getElementById("editPhoneNumber").value,
+        mainAddress: document.getElementById("editMainAddress").value,
+        subAddress: document.getElementById("editSubAddress").value,
+        zipCode: document.getElementById("editZipCode").value
+    };
+    console.log(editAddress);
+
+    updateAddress(editAddressId, editAddress);
+
+    editModal.style.display = "none";
+});
+
+async function updateAddress(addressId, editAddress) {
+    const response = await fetch(`/myroom/address/${addressId}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(editAddress)
+    })
+
+    const findAddress = await response.json();
+    console.log(findAddress.addressName);
+    location.reload();
+}
+
+
+let editAddressId;
+async function updateAddressListeners(){
+    const updateButtons = document.querySelectorAll(".edit-address-btn");
+    updateButtons.forEach(button => {
+        button.addEventListener('click', async () => {
+            const addressIdElement = button.closest('.address-item-wrap').querySelector('#address-id');
+            editAddressId = addressIdElement.textContent;
+            console.log("수정 클릭", editAddressId);
+            editModal.style.display = "block";
+        });
+    });
 }
 
 async function addAddress(address){
@@ -79,36 +135,9 @@ async function addAddress(address){
     location.reload();
 }
 
-const modal = document.querySelector(".modal");
-const submitBtn = document.querySelector("#submitAddress");
-const closeBtn = document.querySelector(".close");
-const addAddressButton = document.querySelector(".add-address-btn");
-
-closeBtn.addEventListener('click', () => {
-    modal.style.display = "none";
-})
-
-addAddressButton.addEventListener('click', () => {
-    modal.style.display = "block";
-});
-
-submitBtn.addEventListener('click',  () => {
-    const address = {
-        addressName: document.getElementById("addressName").value,
-        phoneNumber: document.getElementById("phoneNumber").value,
-        mainAddress: document.getElementById("mainAddress").value,
-        subAddress: document.getElementById("subAddress").value,
-        zipCode: document.getElementById("zipCode").value
-    }
-
-    addAddress(address);
-    modal.style.display = "none";
-});
-
-
-async function setDefaultAddressButtonListeners() {
-    const setDefaultAddressBtns = document.querySelectorAll(".set-default-address-btn");
-    setDefaultAddressBtns.forEach(button => {
+async function setDefaultAddress() {
+    const setDefaultAddressButtons = document.querySelectorAll(".set-default-address-btn");
+    setDefaultAddressButtons.forEach(button => {
         button.addEventListener('click', async () => {
             const addressIdElement = button.closest('.address-item-wrap').querySelector('#address-id');
             const addressId = addressIdElement.textContent;
@@ -131,10 +160,9 @@ async function setDefaultAddressButtonListeners() {
 
 
 async function deleteAddress() {
-    const deleteBtns = document.querySelectorAll(".delete-address-btn");
-    console.log(deleteBtns);
+    const deleteButtons = document.querySelectorAll(".delete-address-btn");
 
-    deleteBtns.forEach(button => {
+    deleteButtons.forEach(button => {
         button.addEventListener('click', async () => {
             const addressIdElement = button.closest('.address-item-wrap').querySelector('#address-id');
             const addressId = addressIdElement.textContent;
@@ -151,5 +179,40 @@ async function deleteAddress() {
 
             location.reload();
         });
+    });
+}
+
+function setEventListeners() {
+
+    const addAddressBtn = document.querySelector(".add-address-btn");
+    const addModal = document.querySelector(".add-modal");
+    const editModal = document.querySelector('.edit-modal');
+    const addCloseBtn = document.querySelector(".add-close");
+    const editCloseBtn = document.querySelector(".edit-close");
+    const addSubmitBtn = document.querySelector(".add-submit");
+
+    addAddressBtn.addEventListener('click', () => {
+        addModal.style.display = "block";
+    });
+
+    addCloseBtn.addEventListener('click', () => {
+        addModal.style.display = "none";
+    });
+
+    editCloseBtn.addEventListener('click', () => {
+        editModal.style.display = "none";
+    });
+
+    addSubmitBtn.addEventListener('click', () => {
+        const address = {
+            addressName: document.getElementById("addressName").value,
+            phoneNumber: document.getElementById("phoneNumber").value,
+            mainAddress: document.getElementById("mainAddress").value,
+            subAddress: document.getElementById("subAddress").value,
+            zipCode: document.getElementById("zipCode").value
+        }
+
+        addAddress(address);
+        addModal.style.display = "none";
     });
 }
