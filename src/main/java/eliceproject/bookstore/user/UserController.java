@@ -97,7 +97,6 @@ public class UserController {
 
         String username = (String) authentication.getPrincipal();
         User user = userService.findByUsername(username);
-        System.out.println("user.toString() = " + user.toString());
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 }
