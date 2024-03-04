@@ -62,6 +62,7 @@ async function getAddressList() {
 
     getDefaultAddress(defaultAddress);
     await setDefaultAddressButtonListeners();
+    await deleteAddress();
 }
 
 async function addAddress(address){
@@ -107,7 +108,6 @@ submitBtn.addEventListener('click',  () => {
 
 async function setDefaultAddressButtonListeners() {
     const setDefaultAddressBtns = document.querySelectorAll(".set-default-address-btn");
-    console.log(setDefaultAddressBtns);
     setDefaultAddressBtns.forEach(button => {
         button.addEventListener('click', async () => {
             const addressIdElement = button.closest('.address-item-wrap').querySelector('#address-id');
@@ -122,6 +122,31 @@ async function setDefaultAddressButtonListeners() {
                 console.log("기본 주소지 설정 성공:", defaultAddress);
             } else {
                 console.error("기본 주소지 설정 실패:", response.statusText);
+            }
+
+            location.reload();
+        });
+    });
+}
+
+
+async function deleteAddress() {
+    const deleteBtns = document.querySelectorAll(".delete-address-btn");
+    console.log(deleteBtns);
+
+    deleteBtns.forEach(button => {
+        button.addEventListener('click', async () => {
+            const addressIdElement = button.closest('.address-item-wrap').querySelector('#address-id');
+            const addressId = addressIdElement.textContent;
+
+            const response = await fetch(`/myroom/address/${addressId}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                console.log("주소지 삭제 성공");
+            } else {
+                console.error("주소지 삭제 실패");
             }
 
             location.reload();
