@@ -1,7 +1,14 @@
 package eliceproject.bookstore.user;
 
+import eliceproject.bookstore.security.CustomUserDetails;
+import eliceproject.bookstore.security.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +21,7 @@ public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final AuthenticationManager authenticationManager;
 
     public User save(UserDto userDto) {
         validateDuplicateUserName(userDto);
@@ -46,11 +54,42 @@ public class UserServiceImpl implements UserService{
 
     public boolean login(String username, String password){
         User user = userRepository.findByUsername(username);
-        if(user != null){
-            return bCryptPasswordEncoder.matches(password, user.getPassword());
+        if(user.isDeleted()){
+            throw new IllegalStateException("해당 아이디는 탈퇴한 아이디입니다.");
         }
-        return false;
+        return bCryptPasswordEncoder.matches(password, user.getPassword());
     }
+
+    @Override
+    public void update(UserDto userDto) {
+        validateEqualsPassword(userDto);
+        User user = userRepository.findByUsername(userDto.getUsername());
+        user.setPassword(bCryptPasswordEncoder.encode(userDto.getPassword()));
+        userRepository.save(user);
+    }
+
+    @Override
+    public void delete(User user) {
+        user.setDeleted(true);
+        userRepository.save(user);
+    }
+
+//    public String login1(String username, String password){
+//        User user = userRepository.findByUsername(username);
+//        if(user == null){
+//            throw new UsernameNotFoundException("존재하지 않는 아이디입니다.");
+//        }
+//        if(!bCryptPasswordEncoder.matches(password, user.getPassword())){
+//            throw new IllegalArgumentException("비밀번호가 틀렸습니다.");
+//        }
+//        CustomUserDetails userDetails = new CustomUserDetails(user);
+//        UsernamePasswordAuthenticationToken authToken =
+//                new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
+//        Authentication authentication = authenticationManager.authenticate(authToken);
+//
+//        return JwtUtil.createToken1(authentication);
+//    }
+
     public User findByUsername(String username){
         User user = userRepository.findByUsername(username);
         if(user == null){
@@ -73,7 +112,7 @@ public class UserServiceImpl implements UserService{
         }
     }
 
-    private void validateEqualsPassword(UserDto userDto) {
+    public void validateEqualsPassword(UserDto userDto) {
         if(!userDto.getPassword().equals(userDto.getPasswordConfirm())){
             throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
         }

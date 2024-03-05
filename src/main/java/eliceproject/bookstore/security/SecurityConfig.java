@@ -31,7 +31,6 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorizeRequest)->authorizeRequest
                         .requestMatchers("/register", "/forget-password", "/forget-username").permitAll()
-                        .requestMatchers("/userPage").hasRole(User.Role.USER.name())
                         .anyRequest().permitAll()
                 )
                 .addFilterBefore(new JwtFilter(userRepository), UsernamePasswordAuthenticationFilter.class)
@@ -46,4 +45,8 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
 }

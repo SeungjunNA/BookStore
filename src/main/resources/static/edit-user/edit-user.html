@@ -18,6 +18,10 @@
     <form class="box register-user-form-box" id="editUserForm">
         <p class="title is-5">회원 정보 수정</p>
 
+        <div class="d-flex justify-content-end mb-3">
+            <button id="deleteButton" class="btn btn-secondary"> 탈퇴하기</button>
+        </div>
+
         <div class="field mb-0">
             <div class="control">
                 <input
@@ -99,9 +103,14 @@
             </div>
         </div>
 
-        <button class="button is-fullwidth btn btn-primary" id="submitButton" type="submit">
-            확인
-        </button>
+        <div class="mt-5 d-flex justify-content-center">
+            <button class="btn btn-primary btn-lg" id="submitButton" type="submit" style="margin-right: 50px;">
+                확인
+            </button>
+            <button class="btn btn-secondary btn-lg" id="backButton" type="submit">
+                이전
+            </button>
+        </div>
     </form>
 </div>
 </body>

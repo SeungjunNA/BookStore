@@ -19,9 +19,11 @@ document.addEventListener("DOMContentLoaded", function (){
         })
             .then(response => {
                 if (!response.ok){
+                    console.log(response.text());
                     throw new Error(response.json());
                 }
                 localStorage.setItem("token", response.headers.get("Authorization"));
+
                 response.json();
             })
             .then(data => {
