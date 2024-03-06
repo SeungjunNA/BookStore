@@ -1,5 +1,6 @@
 package eliceproject.bookstore.order;
 
+import eliceproject.bookstore.address.AddressRepository;
 import eliceproject.bookstore.book.Book;
 import eliceproject.bookstore.book.BookRepository;
 import eliceproject.bookstore.order.dto.OrderBookRequest;
@@ -21,6 +22,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
+    private final AddressRepository addressRepository;
 
     @Transactional
     @Override

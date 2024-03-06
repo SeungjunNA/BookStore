@@ -45,7 +45,7 @@ async function getOrderById(orderId) {
         orderDetailHtml += orderDetailBookListHtml;
     });
 
-    const orderDetailDeliverHtml = `
+    const orderDetailDeliverStatusHtml = `
             </div>
              <div class="order-detail-deliver-wrap">
                 <p>배송상태</p>
@@ -54,7 +54,25 @@ async function getOrderById(orderId) {
             </div>
         </div>
     `;
-    orderDetailHtml += orderDetailDeliverHtml;
+    orderDetailHtml += orderDetailDeliverStatusHtml;
+
+    const orderDetailAddressHtml = `
+        <div class="order-detail-address-wrap">
+            <div class="order-detail-deliver-address">
+                <h3>배송정보</h3>
+                <p>${orderItem['user']['username']}/010-****-****</p>
+                <p>${orderItem['address']['zipCode']}[우편번호] 서울시 어디 몇동 몇호</p>
+            </div>
+            <div class="order-detail-pay">
+                <h3>결제정보</h3>
+                <div class="order-detail-pay-price">
+                    <p>주문 금액</p>
+                    <p>00,000원</p>
+                </div>
+            </div>
+        </div>
+    `;
+    orderDetailHtml += orderDetailAddressHtml;
 
     orderDetailWrap.insertAdjacentHTML('beforeend', orderDetailHtml);
 }
