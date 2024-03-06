@@ -47,7 +47,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const passwordInputErrorMessage = document.getElementById("passwordInputErrorMessage");
         const passwordConfirmInputErrorMessage = document.getElementById("passwordConfirmErrorMessage");
 
-        // 비밀번호와 비밀번호 확인이 일치하는지 확인
+        passwordInputErrorMessage.textContent = "";
+        passwordConfirmInputErrorMessage.textContent = "";
         if (password !== passwordConfirm) {
             document.getElementById("passwordConfirmErrorMessage").innerText = "비밀번호가 일치하지 않습니다.";
             return;
@@ -62,9 +63,6 @@ document.addEventListener("DOMContentLoaded", function () {
             email: email
         };
 
-        passwordInputErrorMessage.textContent = "";
-        passwordConfirmInputErrorMessage.textContent = "";
-
         fetch('/edit-user', {
             method: 'PUT',
             headers: {
@@ -73,14 +71,27 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             body: JSON.stringify(editUserData)
         })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Errorr(response.json());
+            .then(response =>{
+                if(!response.ok){
+                    return response.json();
                 }
             })
             .then(data => {
-                // 서버에서 반환한 데이터를 사용하여 필요한 작업 수행
-                console.log('유저 정보 수정 성공', data);
+                if(typeof data === 'object' && data !== null) {
+                    Object.keys(data).forEach(fieldName => {
+                        const errorMessage = data[fieldName];
+
+                        if(fieldName === "password"){
+                            passwordInputErrorMessage.textContent = errorMessage;
+                        }else if(fieldName === "passwordConfirm"){
+                            passwordConfirmInputErrorMessage.textContent = errorMessage;
+                        }else if(errorMessage === "비밀번호가 일치하지 않습니다."){
+                            passwordConfirmInputErrorMessage.textContent = errorMessage;
+                        }
+                    });
+                    throw new Error(data);
+                }
+                console.log('유저 정보 수정 성공');
                 window.history.back();
             })
             .catch(error => {

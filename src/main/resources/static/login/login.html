@@ -18,6 +18,8 @@
     <form class="box register-user-form-box" id="loginUserForm">
         <p class="title is-5">로그인</p>
 
+        <div id="errorContainer" class="text-danger"></div>
+
         <div class="field">
             <div class="control">
                 <input
@@ -29,6 +31,7 @@
                 />
             </div>
         </div>
+        <div id="usernameInputErrorMessage" class="text-danger"></div>
 
         <div class="field">
             <div class="control">
@@ -41,6 +44,8 @@
                 />
             </div>
         </div>
+        <div id="passwordInputErrorMessage" class="text-danger"></div>
+
         <button class="button is-fullwidth btn btn-primary" id="submitButton" type="submit">
             로그인
         </button>

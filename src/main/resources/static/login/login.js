@@ -1,6 +1,8 @@
 document.addEventListener("DOMContentLoaded", function (){
     const loginForm = document.getElementById("loginUserForm");
 
+    const errorMessage = document.getElementById("errorContainer");
+
     loginForm.addEventListener("submit", function (event){
         event.preventDefault();
 
@@ -9,7 +11,8 @@ document.addEventListener("DOMContentLoaded", function (){
             password: document.getElementById("password").value
         };
 
-        // 서버에 로그인 요청 보내기
+        errorMessage.textContent = "";
+
         fetch('/login', {
             method: 'POST',
             headers: {
@@ -19,14 +22,18 @@ document.addEventListener("DOMContentLoaded", function (){
         })
             .then(response => {
                 if (!response.ok){
-                    console.log(response.text());
-                    throw new Error(response.json());
+                    return response.text();
                 }
                 localStorage.setItem("token", response.headers.get("Authorization"));
-
                 response.json();
             })
             .then(data => {
+                if(data === "존재하지 않는 아이디 입니다." ||
+                    data === "해당 아이디는 탈퇴한 아이디입니다." ||
+                    data === "비밀번호가 틀렸습니다.") {
+                    errorMessage.textContent = data;
+                    throw new Error(data);
+                }
                 console.log("로그인 성공 : " + data);
                 window.location.href = "../edit-user/edit-user.html";
             })

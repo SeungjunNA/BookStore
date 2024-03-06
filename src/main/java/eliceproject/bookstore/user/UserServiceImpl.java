@@ -52,12 +52,17 @@ public class UserServiceImpl implements UserService{
         return user.getPassword();
     }
 
-    public boolean login(String username, String password){
+    public void login(String username, String password){
         User user = userRepository.findByUsername(username);
+        if (user == null){
+            throw new IllegalStateException("존재하지 않는 아이디 입니다.");
+        }
         if(user.isDeleted()){
             throw new IllegalStateException("해당 아이디는 탈퇴한 아이디입니다.");
         }
-        return bCryptPasswordEncoder.matches(password, user.getPassword());
+        if (!bCryptPasswordEncoder.matches(password, user.getPassword())){
+            throw new IllegalStateException("비밀번호가 틀렸습니다.");
+        }
     }
 
     @Override

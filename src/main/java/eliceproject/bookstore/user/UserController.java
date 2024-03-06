@@ -74,7 +74,6 @@ public class UserController {
     public ResponseEntity<?> login(@RequestBody UserDto userDto){
         String username = userDto.getUsername();
         String password = userDto.getPassword();
-
 //        try {
 //            String jwtToken = userService.login1(username, password);
 //            return ResponseEntity.ok()
@@ -84,21 +83,22 @@ public class UserController {
 //            log.info(e.getMessage());
 //            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 //        }
-        if(userService.login(username, password)){
+        try {
+            userService.login(username,password);
             long expireTime = 1000 * 60 * 60;
             String jwtToken = JwtUtil.createToken(username, expireTime);
 
             return ResponseEntity.ok()
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken)
                     .body("로그인 성공");
-        };
-        return new ResponseEntity<>("아이디와 비밀번호를 다시 입력해줏요.", HttpStatus.BAD_REQUEST);
+        }catch (Exception e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/edit-user")
     public ResponseEntity<?> editUserForm(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         String username = (String) authentication.getPrincipal();
         User user = userService.findByUsername(username);
         return new ResponseEntity<>(user, HttpStatus.OK);
@@ -106,32 +106,28 @@ public class UserController {
 
     @PutMapping("/edit-user")
     public ResponseEntity<?> editUser(@RequestBody @Valid UserDto userDto, BindingResult bindingResult){
-        log.info(userDto.getUsername());
+        Map<String, String> errors = new HashMap<>();
         if(bindingResult.hasErrors()){
-            Map<String, String> errors = new HashMap<>();
             bindingResult.getAllErrors().forEach(error->{
                 String fieldName = ((FieldError) error).getField();
                 String errorMessage = error.getDefaultMessage();
                 errors.put(fieldName, errorMessage);
-                log.info(errorMessage);
             });
             return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
         }
         try {
             userService.update(userDto);
-            log.info("유저정보 수정");
             return new ResponseEntity<>(HttpStatus.OK);
-        }catch (IllegalStateException e){
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }catch (Exception e){
+            errors.put("error", e.getMessage());
+            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
         }
     }
 
     @DeleteMapping("/delete")
     public ResponseEntity<?> deleteUser(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         String username = (String) authentication.getPrincipal();
-        log.info(username);
         User user = userService.findByUsername(username);
         userService.delete(user);
         return new ResponseEntity<>(HttpStatus.OK);
