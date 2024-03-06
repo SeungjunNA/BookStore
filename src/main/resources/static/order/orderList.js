@@ -15,12 +15,13 @@ async function getAllOrder() {
     orderListWrap.innerHTML = '';
 
     orderList.forEach(order => {
+        const orderDetailLink = `/order/orderDetail.html?orderId=${order['id']}`;
         const orderItemHtml = `
             <div class="order-item-wrap">
                 <span>주문내역</span>
                 <div class="order-item-meta-wrap">
                     <p id="order-item-number">${order['id']}</p>
-                    <p id="order-item-detail"><a>상세보기 ></a></p>
+                    <p id="order-item-detail"><a href="${orderDetailLink}">상세보기 ></a></p>
                 </div>
                 <div class="order-item-contents-wrap">
                     <div>
