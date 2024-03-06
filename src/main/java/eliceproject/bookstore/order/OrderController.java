@@ -28,4 +28,11 @@ public class OrderController {
         return new ResponseEntity<>(orderService.findAll(), HttpStatus.OK);
     }
 
+    /* 주문 아이디로 조회 */
+    @GetMapping("/{orderId}")
+    public ResponseEntity<OrderDTO> getOrderById(@PathVariable Long orderId) {
+        Order findOrder = orderService.findById(orderId);
+        return new ResponseEntity<>(OrderDTO.toDTO(findOrder), HttpStatus.OK);
+    }
+
 }
