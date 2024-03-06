@@ -18,42 +18,45 @@ async function getOrderById(orderId) {
     const orderDetailWrap = document.querySelector(".order-detail-wrap");
     orderDetailWrap.innerHTML = '';
 
+    let orderDetailHtml = `
+        <div class="order-detail-meta-wrap">
+            <span id="order-detail-date">${orderItem['orderDate']}</span>
+            <span id="order-detail-number">${orderItem['id']}</span>
+        </div>
+        <div class="order-detail-book-list-wrap">
+           <div class="order-detail-book-wrap">
+    `;
+
     orderBookList.forEach(book => {
-        const orderDetailHtml = `
-            <div class="order-detail-meta-wrap">
-                <span id="order-detail-date">${orderItem['orderDate']}</span>
-                <span id="order-detail-number">${orderItem['id']}</span>
+        const orderDetailBookListHtml = `
+            <div class="order-detail-book-item">
+                <div class="order-detail-book">
+                    <img src="../images/book.png" alt="책 표지 사진"/>
+                    <div id="order-book-info">
+                        <p>${book['book']['title']}</p>
+                        <span>수량: ${book['stock']}</span>
+                    </div>
+                </div>
+                <div class="order-detail-book-price">
+                    <p>가격</p>
+                </div>
+            </div>    
+        `;
+        orderDetailHtml += orderDetailBookListHtml;
+    });
+
+    const orderDetailDeliverHtml = `
             </div>
-            <div class="order-detail-book-list-wrap">
-                <div class="order-detail-book-wrap">
-                    ${orderItem['orderBookList'].map(book => `
-                        <div class="order-detail-book-item">
-                            <div class="order-detail-book">
-                                <img src="../images/book.png" alt="책 표지 사진"/>
-                                <div id="order-book-info">
-                                    <p>${book['book']['title']}</p>
-                                    <span>수량: ${book['stock']}</span>
-                                </div>
-                            </div>
-                            <div class="order-detail-book-price">
-                                <p>가격</p>
-                            </div>
-                        </div>          
-                    `).join('')}
-                </div>
-                <div class="order-detail-deliver-wrap">
-                    <p>배송상태</p>
-                    <p>배송번호</p>
-                    <button class="order-deliver-button">배송 조회</button>
-                </div>
+             <div class="order-detail-deliver-wrap">
+                <p>배송상태</p>
+                <p>배송번호</p>
+                <button class="order-deliver-button">배송 조회</button>
             </div>
         </div>
-        `;
+    `;
+    orderDetailHtml += orderDetailDeliverHtml;
 
-        orderDetailWrap.insertAdjacentHTML('beforeend', orderDetailHtml);
-    })
-
-    console.log(orderItem);
+    orderDetailWrap.insertAdjacentHTML('beforeend', orderDetailHtml);
 }
 
 
