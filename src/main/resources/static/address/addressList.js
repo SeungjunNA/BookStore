@@ -103,7 +103,7 @@ async function updateAddress(addressId, editAddress) {
 
     const findAddress = await response.json();
     console.log(findAddress.addressName);
-    location.reload();
+    getAllAddress();
 }
 
 
@@ -131,7 +131,7 @@ async function addAddress(address){
 
     const createdAddress = await response.json();
     console.log(createdAddress.addressName);
-    location.reload();
+    getAllAddress();
 }
 
 async function setDefaultAddress() {
@@ -152,7 +152,7 @@ async function setDefaultAddress() {
                 console.error("기본 주소지 설정 실패:", response.statusText);
             }
 
-            location.reload();
+            getAllAddress();
         });
     });
 }
@@ -176,7 +176,7 @@ async function deleteAddress() {
                 console.error("주소지 삭제 실패");
             }
 
-            location.reload();
+            getAllAddress();
         });
     });
 }
