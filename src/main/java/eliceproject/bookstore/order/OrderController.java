@@ -1,5 +1,6 @@
 package eliceproject.bookstore.order;
 
+import eliceproject.bookstore.order.dto.OrderDTO;
 import eliceproject.bookstore.order.dto.OrderRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,7 @@ public class OrderController {
 
     /* 주문 전체 조회 */
     @GetMapping
-    public ResponseEntity<List<Order>> getAllOrder() {
+    public ResponseEntity<List<OrderDTO>> getAllOrder() {
         return new ResponseEntity<>(orderService.findAll(), HttpStatus.OK);
     }
 
