@@ -1,12 +1,13 @@
 package eliceproject.bookstore.user;
 
-import eliceproject.bookstore.security.CustomUserDetails;
 import eliceproject.bookstore.security.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -52,17 +53,16 @@ public class UserServiceImpl implements UserService{
         return user.getPassword();
     }
 
-    public void login(String username, String password){
+    public String login(String username, String password){
         User user = userRepository.findByUsername(username);
-        if (user == null){
+        if (user == null || user.isDeleted()){
             throw new IllegalStateException("존재하지 않는 아이디 입니다.");
-        }
-        if(user.isDeleted()){
-            throw new IllegalStateException("해당 아이디는 탈퇴한 아이디입니다.");
         }
         if (!bCryptPasswordEncoder.matches(password, user.getPassword())){
             throw new IllegalStateException("비밀번호가 틀렸습니다.");
         }
+        System.out.println("UserServiceImpl.login");
+        return JwtUtil.createToken(username);
     }
 
     @Override
@@ -78,22 +78,6 @@ public class UserServiceImpl implements UserService{
         user.setDeleted(true);
         userRepository.save(user);
     }
-
-//    public String login1(String username, String password){
-//        User user = userRepository.findByUsername(username);
-//        if(user == null){
-//            throw new UsernameNotFoundException("존재하지 않는 아이디입니다.");
-//        }
-//        if(!bCryptPasswordEncoder.matches(password, user.getPassword())){
-//            throw new IllegalArgumentException("비밀번호가 틀렸습니다.");
-//        }
-//        CustomUserDetails userDetails = new CustomUserDetails(user);
-//        UsernamePasswordAuthenticationToken authToken =
-//                new UsernamePasswordAuthenticationToken(userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
-//        Authentication authentication = authenticationManager.authenticate(authToken);
-//
-//        return JwtUtil.createToken1(authentication);
-//    }
 
     public User findByUsername(String username){
         User user = userRepository.findByUsername(username);
@@ -129,4 +113,22 @@ public class UserServiceImpl implements UserService{
             throw new IllegalStateException("중복되는 아이디가 있습니다.");
         }
     }
+
+    //    public String login1(String username, String password){
+//        User user = userRepository.findByUsername(username);
+//        if(user == null){
+//            throw new UsernameNotFoundException("존재하지 않는 아이디입니다.");
+//        }
+//        if(!bCryptPasswordEncoder.matches(password, user.getPassword())){
+//            throw new IllegalArgumentException("비밀번호가 틀렸습니다.");
+//        }
+//
+//        UsernamePasswordAuthenticationToken authToken =
+//                new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
+//        Authentication authentication = authenticationManager.authenticate(authToken);
+//
+//        log.info("auth");
+//
+//        return JwtUtil.createToken1(authentication);
+//    }
 }

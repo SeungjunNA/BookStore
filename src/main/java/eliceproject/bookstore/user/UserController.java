@@ -1,6 +1,6 @@
 package eliceproject.bookstore.user;
 
-import eliceproject.bookstore.security.CustomUserDetails;
+//import eliceproject.bookstore.security.CustomUserDetails;
 import eliceproject.bookstore.security.jwt.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpServletResponseWrapper;
@@ -84,10 +84,8 @@ public class UserController {
 //            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 //        }
         try {
-            userService.login(username,password);
-            long expireTime = 1000 * 60 * 60;
-            String jwtToken = JwtUtil.createToken(username, expireTime);
-
+            String jwtToken = userService.login(username,password);;
+            log.info(jwtToken);
             return ResponseEntity.ok()
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken)
                     .body("로그인 성공");

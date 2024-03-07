@@ -29,7 +29,6 @@ document.addEventListener("DOMContentLoaded", function (){
             })
             .then(data => {
                 if(data === "존재하지 않는 아이디 입니다." ||
-                    data === "해당 아이디는 탈퇴한 아이디입니다." ||
                     data === "비밀번호가 틀렸습니다.") {
                     errorMessage.textContent = data;
                     throw new Error(data);

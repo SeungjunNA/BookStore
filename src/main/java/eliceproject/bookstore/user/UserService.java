@@ -6,7 +6,7 @@ public interface UserService {
     String findPassword(UserDto userDto);
 //    boolean login(String username, String password);
     User findByUsername(String username);
-    void login(String username, String password);
+    String login(String username, String password);
 
     void update(UserDto userDto);
 

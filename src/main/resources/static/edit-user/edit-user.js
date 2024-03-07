@@ -103,25 +103,27 @@ document.addEventListener("DOMContentLoaded", function () {
     deleteButton.addEventListener("click", function (event){
         event.preventDefault();
 
-        fetch('/delete', {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': jwtToken
-            }
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Errorr(response.json());
+        if(window.confirm("회원 탈퇴를 하시겠습니까?") && window.confirm("탈퇴를 하시게 되면, 데이터는 절대 복구 불가능합니다.")){
+            fetch('/delete', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': jwtToken
                 }
             })
-            .then(data => {
-                console.log('회원탈퇴 성공');
-                window.location.href = "/../login/login.html";
-            })
-            .catch(error => {
-                console.error('회원탈퇴 실패' + error);
-            });
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Errorr(response.json());
+                    }
+                })
+                .then(data => {
+                    console.log('회원탈퇴 성공');
+                    window.location.href = "/../login/login.html";
+                })
+                .catch(error => {
+                    console.error('회원탈퇴 실패' + error);
+                });
+        }
     });
 
     const backButton = document.getElementById("backButton");
