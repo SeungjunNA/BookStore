@@ -29,6 +29,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final UserRepository userRepository;
+    private final JwtUtil jwtUtil;
     private final CustomUserDetailsService customUserDetailsService;
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
@@ -40,7 +41,7 @@ public class SecurityConfig {
                         .requestMatchers("/register", "/forget-password", "/forget-username").permitAll()
                         .anyRequest().permitAll()
                 )
-                .addFilterBefore(new JwtFilter(userRepository), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtFilter(userRepository,jwtUtil), UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session->session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 

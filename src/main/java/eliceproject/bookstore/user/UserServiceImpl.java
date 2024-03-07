@@ -22,6 +22,7 @@ public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final JwtUtil jwtUtil;
 //    private final AuthenticationManager authenticationManager;
 
     public User save(UserDto userDto) {
@@ -61,8 +62,7 @@ public class UserServiceImpl implements UserService{
         if (!bCryptPasswordEncoder.matches(password, user.getPassword())){
             throw new IllegalStateException("비밀번호가 틀렸습니다.");
         }
-        System.out.println("UserServiceImpl.login");
-        return JwtUtil.createToken(username);
+        return jwtUtil.createToken(username);
     }
 
     @Override

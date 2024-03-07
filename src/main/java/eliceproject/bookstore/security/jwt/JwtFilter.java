@@ -21,6 +21,7 @@ import java.io.IOException;
 public class JwtFilter extends OncePerRequestFilter {
 
     private final UserRepository userRepository;
+    private final JwtUtil jwtUtil;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
@@ -36,11 +37,11 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String token = authorizationHeader.split(" ")[1]; // 1로 바꾸기
 
-        if(JwtUtil.isExpired(token)){
+        if(jwtUtil.isExpired(token)){
             filterChain.doFilter(request, response);
         }
 
-        String username = JwtUtil.getUsername(token);
+        String username = jwtUtil.getUsername(token);
         User user = userRepository.findByUsername(username);
 
         UsernamePasswordAuthenticationToken authToken =
