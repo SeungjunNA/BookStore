@@ -55,7 +55,7 @@ public class UserController {
         try {
             String username = userService.findUsername(userDto);
             return new ResponseEntity<>(username, HttpStatus.OK);
-        }catch (IllegalStateException e){
+        }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
@@ -65,7 +65,7 @@ public class UserController {
         try {
             String password = userService.findPassword(userDto);
             return new ResponseEntity<>(password, HttpStatus.OK);
-        }catch (IllegalStateException e){
+        }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
@@ -96,8 +96,8 @@ public class UserController {
         }
     }
 
-    @GetMapping("/edit-user")
-    public ResponseEntity<?> editUserForm(){
+    @GetMapping("/user")
+    public ResponseEntity<?> user(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = (String) authentication.getPrincipal();
         User user = userService.findByUsername(username);

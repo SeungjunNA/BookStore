@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .then(username => {
                 console.log("비밀번호 찾기 성공:", username);
-                resultContainer.textContent = username;
+                window.location.href = "/password-reset.html";
             })
             .catch(error => {
                 console.error("비밀번호 찾기 실패:", error);

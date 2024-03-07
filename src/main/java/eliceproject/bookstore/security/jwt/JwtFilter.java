@@ -34,7 +34,6 @@ public class JwtFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         }
 
-        logger.info(authorizationHeader);
         String token = authorizationHeader.split(" ")[1]; // 1로 바꾸기
 
         if(JwtUtil.isExpired(token)){

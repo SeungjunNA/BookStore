@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService{
 
     public String findUsername(UserDto userDto) {
         User user = userRepository.findByNameAndEmail(userDto.getName(), userDto.getEmail());
-        if(user == null){
+        if(user == null || user.isDeleted()){
             throw new IllegalStateException("이름과 이메일을 정확히 입력해주세요.");
         }
         return user.getUsername();
@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService{
 
     public String findPassword(UserDto userDto) {
         User user = userRepository.findByNameAndUsernameAndEmail(userDto.getName(), userDto.getUsername(), userDto.getEmail());
-        if(user == null){
+        if(user == null || user.isDeleted()){
             throw new IllegalStateException("이름과 아이디와 이메일을 정확히 입력해주세요.");
         }
         return user.getPassword();
@@ -97,15 +97,15 @@ public class UserServiceImpl implements UserService{
 
     public User findByUsername(String username){
         User user = userRepository.findByUsername(username);
-        if(user == null){
+        if(user == null || user.isDeleted()){
             throw new IllegalArgumentException("유저를 찾을 수 없습니다.");
         }
         return user;
     }
 
     private void validateDuplicateMobileNumber(UserDto userDto) {
-        User finduser = userRepository.findByMobileNumber(userDto.getMobileNumber());
-        if(finduser != null){
+        User user = userRepository.findByMobileNumber(userDto.getMobileNumber());
+        if(user != null){
             throw new IllegalStateException("동일한 핸드폰 번호로 가입한 계정이 있습니다.");
         }
     }

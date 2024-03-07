@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
         headers['Authorization'] = jwtToken;
     }
     // 서버에 GET 요청 보내기
-    fetch('/edit-user', {
+    fetch('/user', {
         method: 'GET',
         headers: headers
     })
