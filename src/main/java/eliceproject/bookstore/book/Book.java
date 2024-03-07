@@ -33,7 +33,6 @@ public class Book {
     private LocalDateTime created;
     private LocalDateTime updated;
     private int subCategoryId;
-    private int writerId;
 
     public static Book toEntity(BookDTO BookDTO) {
         return Book.builder()
@@ -51,7 +50,6 @@ public class Book {
                 .created(BookDTO.getCreated())
                 .updated(BookDTO.getUpdated())
                 .subCategoryId(BookDTO.getSubCategoryId())
-                .writerId(BookDTO.getWriterId())
                 .build();
     }
 }

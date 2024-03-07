@@ -27,7 +27,9 @@ async function getOrderById(orderId) {
            <div class="order-detail-book-wrap">
     `;
 
+    let totalPrice = 0;
     orderBookList.forEach(book => {
+        const subtotal = book['stock'] * book['book']['price'];
         const orderDetailBookListHtml = `
             <div class="order-detail-book-item">
                 <div class="order-detail-book">
@@ -38,10 +40,11 @@ async function getOrderById(orderId) {
                     </div>
                 </div>
                 <div class="order-detail-book-price">
-                    <p>가격</p>
+                    <p>${subtotal}</p>
                 </div>
             </div>    
         `;
+        totalPrice += subtotal;
         orderDetailHtml += orderDetailBookListHtml;
     });
 
@@ -67,7 +70,7 @@ async function getOrderById(orderId) {
                 <h3>결제정보</h3>
                 <div class="order-detail-pay-price">
                     <p>주문 금액</p>
-                    <p>00,000원</p>
+                    <p>${totalPrice}</p>
                 </div>
             </div>
         </div>

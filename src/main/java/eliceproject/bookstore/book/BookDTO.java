@@ -24,7 +24,6 @@ public class BookDTO {
     private LocalDateTime created;
     private LocalDateTime updated;
     private int subCategoryId;
-    private int writerId;
 
     public static BookDTO toDTO(Book book) {
         return BookDTO.builder()
@@ -42,7 +41,6 @@ public class BookDTO {
                 .created(book.getCreated())
                 .updated(book.getUpdated())
                 .subCategoryId(book.getSubCategoryId())
-                .writerId(book.getWriterId())
                 .build();
     }
 }
