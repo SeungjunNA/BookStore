@@ -1,6 +1,5 @@
 package eliceproject.bookstore.security.jwt;
 
-import eliceproject.bookstore.security.CustomUserDetails;
 import eliceproject.bookstore.user.User;
 import eliceproject.bookstore.user.UserRepository;
 import jakarta.servlet.FilterChain;
@@ -9,9 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 

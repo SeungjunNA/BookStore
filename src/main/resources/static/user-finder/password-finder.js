@@ -32,9 +32,9 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
                 return response.text();
             })
-            .then(username => {
-                console.log("비밀번호 찾기 성공:", username);
-                window.location.href = "/password-reset.html";
+            .then(data => {
+                resultContainer.textContent = "재발급 비밀번호 : " + data;
+                console.log("비밀번호 찾기 성공:");
             })
             .catch(error => {
                 console.error("비밀번호 찾기 실패:", error);

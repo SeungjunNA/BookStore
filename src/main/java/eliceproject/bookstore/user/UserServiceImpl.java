@@ -3,17 +3,12 @@ package eliceproject.bookstore.user;
 import eliceproject.bookstore.security.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+import java.util.Random;
+
+import static java.lang.Math.random;
 
 @Slf4j
 @Service
@@ -23,7 +18,6 @@ public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtUtil jwtUtil;
-//    private final AuthenticationManager authenticationManager;
 
     public User save(UserDto userDto) {
         validateDuplicateUserName(userDto);
@@ -51,7 +45,17 @@ public class UserServiceImpl implements UserService{
         if(user == null || user.isDeleted()){
             throw new IllegalStateException("이름과 아이디와 이메일을 정확히 입력해주세요.");
         }
-        return user.getPassword();
+        Random random = new Random();
+        int start = 97;
+        int end = 122;
+        String random1 = random.ints(start, end+1).limit(3)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
+        int random2 = (int) ((random()+1)*10000-10000);
+        String newPassword = random1 + random2 + "*";
+        user.setPassword(bCryptPasswordEncoder.encode(newPassword));
+        userRepository.save(user);
+        return newPassword;
     }
 
     public String login(String username, String password){
@@ -113,22 +117,4 @@ public class UserServiceImpl implements UserService{
             throw new IllegalStateException("중복되는 아이디가 있습니다.");
         }
     }
-
-    //    public String login1(String username, String password){
-//        User user = userRepository.findByUsername(username);
-//        if(user == null){
-//            throw new UsernameNotFoundException("존재하지 않는 아이디입니다.");
-//        }
-//        if(!bCryptPasswordEncoder.matches(password, user.getPassword())){
-//            throw new IllegalArgumentException("비밀번호가 틀렸습니다.");
-//        }
-//
-//        UsernamePasswordAuthenticationToken authToken =
-//                new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
-//        Authentication authentication = authenticationManager.authenticate(authToken);
-//
-//        log.info("auth");
-//
-//        return JwtUtil.createToken1(authentication);
-//    }
 }

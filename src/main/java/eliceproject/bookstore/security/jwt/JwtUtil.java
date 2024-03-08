@@ -4,7 +4,6 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -40,18 +39,4 @@ public class JwtUtil {
     private Claims extractClaims(String token){
         return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody();
     }
-
-
-//    public static String createToken1(Authentication authentication) {
-//        String username = (String) authentication.getPrincipal();
-//        Claims claims = Jwts.claims();
-//        claims.put("username", username);
-//
-//        return Jwts.builder()
-//                .setClaims(claims)
-//                .setIssuedAt(new Date(System.currentTimeMillis()))
-//                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
-//                .signWith(SignatureAlgorithm.HS256, secretKey)
-//                .compact();
-//    }
 }

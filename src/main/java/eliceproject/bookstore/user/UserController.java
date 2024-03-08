@@ -64,6 +64,8 @@ public class UserController {
     public ResponseEntity<String> findPassword(@RequestBody UserDto userDto){
         try {
             String password = userService.findPassword(userDto);
+
+
             return new ResponseEntity<>(password, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -74,18 +76,8 @@ public class UserController {
     public ResponseEntity<?> login(@RequestBody UserDto userDto){
         String username = userDto.getUsername();
         String password = userDto.getPassword();
-//        try {
-//            String jwtToken = userService.login1(username, password);
-//            return ResponseEntity.ok()
-//                    .header(HttpHeaders.AUTHORIZATION, jwtToken)
-//                    .body("로그인 성공");
-//        }catch (Exception e){
-//            log.info(e.getMessage());
-//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-//        }
         try {
             String jwtToken = userService.login(username,password);;
-            log.info(jwtToken);
             return ResponseEntity.ok()
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken)
                     .body("로그인 성공");
