@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,6 +30,7 @@ public class OrderServiceImpl implements OrderService {
     public Order create(OrderRequest orderRequest) {
         Order order = new Order();
         order.setUser(userRepository.findById(orderRequest.getUserId()).orElseThrow());
+        order.setAddress(addressRepository.findById(orderRequest.getAddressId()).orElseThrow());
         order.setOrderStatus(OrderStatus.READY_FOR_SHIPPING);
         order.setOrderDate(LocalDateTime.now());
 

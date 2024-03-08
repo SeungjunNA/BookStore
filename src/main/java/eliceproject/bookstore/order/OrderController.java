@@ -7,7 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/myroom/order")
@@ -33,6 +35,17 @@ public class OrderController {
     public ResponseEntity<OrderDTO> getOrderById(@PathVariable Long orderId) {
         Order findOrder = orderService.findById(orderId);
         return new ResponseEntity<>(OrderDTO.toDTO(findOrder), HttpStatus.OK);
+    }
+
+    /* 주문 상태별 분류 및 갯수 조회 */
+    @GetMapping("/status/count")
+    public ResponseEntity<Map<OrderStatus, Long>> getOrderCountByStatus(@RequestBody List<Order> orderList) {
+        Map<OrderStatus, Long> orderStatusCountMap = new HashMap<>();
+        for (Order order : orderList) {
+            OrderStatus orderStatus = order.getOrderStatus();
+            orderStatusCountMap.put(orderStatus, orderStatusCountMap.getOrDefault(orderStatus, 0L) + 1);
+        }
+        return new ResponseEntity<>(orderStatusCountMap, HttpStatus.OK);
     }
 
 }
