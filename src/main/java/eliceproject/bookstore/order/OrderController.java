@@ -20,7 +20,7 @@ public class OrderController {
 
     /* 주문 생성 */
     @PostMapping
-    public ResponseEntity<Order> createOrder(@RequestBody OrderRequest orderRequest) {
+    public ResponseEntity<Order> createOrder(@RequestBody OrderRequest orderRequest) throws Exception{
         return new ResponseEntity<>(orderService.create(orderRequest), HttpStatus.OK);
     }
 

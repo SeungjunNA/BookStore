@@ -3,6 +3,7 @@ package eliceproject.bookstore.order;
 import eliceproject.bookstore.address.AddressRepository;
 import eliceproject.bookstore.book.Book;
 import eliceproject.bookstore.book.BookRepository;
+import eliceproject.bookstore.exception.OutOfStockException;
 import eliceproject.bookstore.order.dto.OrderBookRequest;
 import eliceproject.bookstore.order.dto.OrderDTO;
 import eliceproject.bookstore.order.dto.OrderRequest;
@@ -13,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,7 +27,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Transactional
     @Override
-    public Order create(OrderRequest orderRequest) {
+    public Order create(OrderRequest orderRequest) throws OutOfStockException {
         Order order = new Order();
         order.setUser(userRepository.findById(orderRequest.getUserId()).orElseThrow());
         order.setAddress(addressRepository.findById(orderRequest.getAddressId()).orElseThrow());
@@ -35,6 +35,14 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderDate(LocalDateTime.now());
 
         for (OrderBookRequest orderBookRequest : orderRequest.getOrderBookRequestList()) {
+            Book book = bookRepository.findById(orderBookRequest.getBookId()).orElseThrow();
+            if (book.getStock() < orderBookRequest.getStock()) {
+                throw new OutOfStockException("Not enough stocks for book : " + book.getId());
+            }
+
+            book.setStock(orderBookRequest.getStock());
+            bookRepository.save(book);
+
             OrderBook orderBook = new OrderBook();
             orderBook.setOrder(order);
             orderBook.setStock(orderBookRequest.getStock());

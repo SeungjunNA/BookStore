@@ -1,5 +1,6 @@
 package eliceproject.bookstore.order;
 
+import eliceproject.bookstore.exception.OutOfStockException;
 import eliceproject.bookstore.order.dto.OrderDTO;
 import eliceproject.bookstore.order.dto.OrderRequest;
 
@@ -8,7 +9,7 @@ import java.util.Map;
 
 public interface OrderService {
 
-    Order create(OrderRequest orderRequest);
+    Order create(OrderRequest orderRequest) throws OutOfStockException;
 
     List<OrderDTO> findAll();
 
