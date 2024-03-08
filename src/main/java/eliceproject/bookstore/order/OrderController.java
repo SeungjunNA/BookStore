@@ -2,9 +2,13 @@ package eliceproject.bookstore.order;
 
 import eliceproject.bookstore.order.dto.OrderDTO;
 import eliceproject.bookstore.order.dto.OrderRequest;
+import eliceproject.bookstore.user.User;
+import eliceproject.bookstore.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -17,6 +21,7 @@ import java.util.Map;
 public class OrderController {
 
     private final OrderService orderService;
+    private final UserService userService;
 
     /* 주문 생성 */
     @PostMapping
@@ -46,6 +51,19 @@ public class OrderController {
             orderStatusCountMap.put(orderStatus, orderStatusCountMap.getOrDefault(orderStatus, 0L) + 1);
         }
         return new ResponseEntity<>(orderStatusCountMap, HttpStatus.OK);
+    }
+
+    @GetMapping("/userOrder")
+    public ResponseEntity<?> getOrderByUserId(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = (String) authentication.getPrincipal();
+        User user = userService.findByUsername(username);
+
+        Order findOrder = orderService.findByUserId(user.getId());
+        if(findOrder == null){
+            return new ResponseEntity<>("주문한 상품이 없습니다.", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(OrderDTO.toDTO(findOrder), HttpStatus.OK);
     }
 
 }

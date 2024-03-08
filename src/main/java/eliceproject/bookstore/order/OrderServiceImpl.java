@@ -69,4 +69,9 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(() -> new IllegalArgumentException("Order not found with id : " + orderId));
     }
 
+    @Override
+    public Order findByUserId(Long userId) {
+        return orderRepository.findByUserId(userId).orElse(null);
+    }
+
 }
