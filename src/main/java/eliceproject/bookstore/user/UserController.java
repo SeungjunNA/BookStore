@@ -1,6 +1,7 @@
 package eliceproject.bookstore.user;
 
 //import eliceproject.bookstore.security.CustomUserDetails;
+import eliceproject.bookstore.security.SecurityConfig;
 import eliceproject.bookstore.security.jwt.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpServletResponseWrapper;
@@ -10,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,6 +30,7 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
 
     @PostMapping("/register")

@@ -3,6 +3,10 @@ package eliceproject.bookstore.user;
 import eliceproject.bookstore.security.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +22,7 @@ public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JwtUtil jwtUtil;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     public User save(UserDto userDto) {
         validateDuplicateUserName(userDto);
@@ -66,7 +71,10 @@ public class UserServiceImpl implements UserService{
         if (!bCryptPasswordEncoder.matches(password, user.getPassword())){
             throw new IllegalStateException("비밀번호가 틀렸습니다.");
         }
-        return jwtUtil.createToken(username);
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                new UsernamePasswordAuthenticationToken(username, password);
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(usernamePasswordAuthenticationToken);
+        return jwtUtil.createToken(authentication);
     }
 
     @Override
