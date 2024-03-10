@@ -38,8 +38,8 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorizeRequest)->authorizeRequest
                         .requestMatchers("/", "/login", "login/login.html", "/register", "/forget-password", "/forget-username").permitAll()
-//                        .anyRequest().permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
+//                        .anyRequest().authenticated()
                 )
 
                 .addFilterBefore(new JwtFilter(userRepository,jwtUtil), UsernamePasswordAuthenticationFilter.class)
