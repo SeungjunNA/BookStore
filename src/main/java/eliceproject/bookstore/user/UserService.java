@@ -10,4 +10,7 @@ public interface UserService {
     void update(UserDto userDto);
 
     void delete(User user);
+//    String login1(String username, String password);
+
+    Long findUserIdByUsername(String username);
 }

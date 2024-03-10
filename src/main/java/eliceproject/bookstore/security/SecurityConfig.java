@@ -27,7 +27,8 @@ public class SecurityConfig {
 
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
-    CorsConfig config;
+    private final CustomUserDetailsService customUserDetailsService;
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http
@@ -36,9 +37,11 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorizeRequest)->authorizeRequest
-                        .requestMatchers("/register", "/forget-password", "/forget-username").permitAll()
-                        .anyRequest().permitAll()
+                        .requestMatchers("/", "/login", "login/login.html", "/register", "/forget-password", "/forget-username").permitAll()
+//                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
                 )
+
                 .addFilterBefore(new JwtFilter(userRepository,jwtUtil), UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session->session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
