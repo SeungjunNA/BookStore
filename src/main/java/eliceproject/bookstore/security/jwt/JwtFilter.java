@@ -22,16 +22,12 @@ public class JwtFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-
+        System.out.println("authorizationHeader = " + authorizationHeader);
         if(authorizationHeader == null || !authorizationHeader.startsWith("Bearer")){
             System.out.println("Token is null");
             filterChain.doFilter(request, response);
             return;
         }
-
-//        if(!authorizationHeader.startsWith("Bearer")){
-//            filterChain.doFilter(request, response);
-//        }
 
         String token = authorizationHeader.split(" ")[1]; // 1로 바꾸기
 
@@ -44,11 +40,9 @@ public class JwtFilter extends OncePerRequestFilter {
         String username = jwtUtil.getUsername(token);
         User user = userRepository.findByUsername(username);
 
-//        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
-
-        CustomUserDetails customUserDetails = new CustomUserDetails(user);
-        Authentication authToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication((authToken));
+        UsernamePasswordAuthenticationToken authToken =
+                new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
+        SecurityContextHolder.getContext().setAuthentication(authToken);
 
         filterChain.doFilter(request, response);
     }

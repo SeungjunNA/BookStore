@@ -2,6 +2,7 @@ package eliceproject.bookstore.security;
 
 import eliceproject.bookstore.security.jwt.JwtFilter;
 import eliceproject.bookstore.security.jwt.JwtUtil;
+import eliceproject.bookstore.user.User;
 import eliceproject.bookstore.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +19,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
-import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -27,19 +27,22 @@ public class SecurityConfig {
 
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
-    private final CustomUserDetailsService customUserDetailsService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http
                 .csrf(AbstractHttpConfigurer::disable)
-//                .cors(customizer->customizer.configurationSource(corsConfigurationSource()))
+                .cors(customizer->customizer.configurationSource(corsConfigurationSource()))
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorizeRequest)->authorizeRequest
-                        .requestMatchers("/", "/login", "login/login.html", "/register", "/forget-password", "/forget-username").permitAll()
-//                        .anyRequest().permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/","login/login.html","register/register.html","user-finder/**","home/home.html").permitAll()
+                        .requestMatchers("/register","/username-finder","password-finder","login","/user").permitAll()
+                        .requestMatchers("/common/header.js","/register/register.js","/login/login.js").permitAll()
+                        .requestMatchers("/images/**").permitAll()
+                        .requestMatchers("/css/**").permitAll()
+                                .anyRequest().permitAll()
+//                        .anyRequest().authenticated()
                 )
 
                 .addFilterBefore(new JwtFilter(userRepository,jwtUtil), UsernamePasswordAuthenticationFilter.class)
@@ -54,13 +57,15 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-//    CorsConfigurationSource corsConfigurationSource(){
-//        CorsConfiguration configuration = new CorsConfiguration();
-//
-//        configuration.setAllowedOrigins(Arrays.asList("http://locahost:8080"));
-//        configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE"));
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", configuration);
-//        return source;
-//    }
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource(){
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("http://localhost:8080");
+        configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE"));
+        configuration.addExposedHeader("Authorization");
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 }
