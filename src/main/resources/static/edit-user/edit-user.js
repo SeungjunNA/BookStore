@@ -128,6 +128,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const backButton = document.getElementById("backButton");
     backButton.addEventListener("click", function () {
-        window.history.back();
+        window.location.href = "../user/my-page.html";
     });
 });

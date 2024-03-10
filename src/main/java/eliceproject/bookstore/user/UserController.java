@@ -1,6 +1,7 @@
 package eliceproject.bookstore.user;
 
 //import eliceproject.bookstore.security.CustomUserDetails;
+import eliceproject.bookstore.security.SecurityConfig;
 import eliceproject.bookstore.security.jwt.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpServletResponseWrapper;
@@ -10,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,6 +30,7 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
 
     @PostMapping("/register")
@@ -64,6 +68,8 @@ public class UserController {
     public ResponseEntity<String> findPassword(@RequestBody UserDto userDto){
         try {
             String password = userService.findPassword(userDto);
+
+
             return new ResponseEntity<>(password, HttpStatus.OK);
         }catch (Exception e){
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
@@ -74,18 +80,8 @@ public class UserController {
     public ResponseEntity<?> login(@RequestBody UserDto userDto){
         String username = userDto.getUsername();
         String password = userDto.getPassword();
-//        try {
-//            String jwtToken = userService.login1(username, password);
-//            return ResponseEntity.ok()
-//                    .header(HttpHeaders.AUTHORIZATION, jwtToken)
-//                    .body("로그인 성공");
-//        }catch (Exception e){
-//            log.info(e.getMessage());
-//            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-//        }
         try {
             String jwtToken = userService.login(username,password);;
-            log.info(jwtToken);
             return ResponseEntity.ok()
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwtToken)
                     .body("로그인 성공");
