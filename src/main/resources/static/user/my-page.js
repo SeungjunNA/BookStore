@@ -33,24 +33,22 @@ document.addEventListener("DOMContentLoaded", function (){
     })
         .then(response=>{
             if(!response.ok){
-                throw new Error('유저 정보를 가져오는데 실패했습니다.');
+                throw new Error('주문 정보를 가져오는데 실패했습니다.');
             }
             return response.json();
         })
         .then(data=>{
             console.log(data);
             if (data && data.length > 0) {
-                // 주문 데이터 처리 (예: 테이블에 표시)
                 displayOrderList(data);
             } else {
-                // 데이터가 비어 있다면, orderList 엘리먼트 업데이트
                 const orderList = document.getElementById("orderList");
                 orderList.textContent = '주문내역이 없습니다.';
                 orderList.style.textAlign = 'center';
             }
         })
         .catch(error=>{
-            console.log('유저 정보를 가져오는데 실패했습니다.', error);
+            console.log('주문 정보를 가져오는데 실패했습니다.', error);
         })
 })
 function displayOrderList(data) {
