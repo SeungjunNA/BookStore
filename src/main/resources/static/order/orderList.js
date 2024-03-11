@@ -13,6 +13,7 @@ async function getUser() {
     }
 
     const nickname = document.querySelector(".nickname");
+    console.log("nickname: " + nickname);
     fetch('/user', {
         method: 'GET',
         headers: headers
@@ -63,6 +64,7 @@ async function getAllOrderByUser() {
 }
 
 function renderOrderListData(orderBookList) {
+    console.log("renderOrderListData 호출");
     const orderListWrap = document.querySelector(".order-list-wrap");
 
     orderBookList.forEach(order => {
