@@ -34,8 +34,7 @@ document.addEventListener("DOMContentLoaded", function (){
                     throw new Error(data);
                 }
                 console.log("로그인 성공 : " + data);
-                // window.location.href = "../edit-user/edit-user.html";
-                window.location.href = "../user/my-page.html";
+                window.location.href = "/";
             })
             .catch(error => {
                 console.log("로그인 실패 : " + error);

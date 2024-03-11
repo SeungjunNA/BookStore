@@ -3,7 +3,6 @@ package eliceproject.bookstore.user;
 import eliceproject.bookstore.security.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -72,7 +71,7 @@ public class UserServiceImpl implements UserService{
             throw new IllegalStateException("비밀번호가 틀렸습니다.");
         }
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                new UsernamePasswordAuthenticationToken(username, password);
+                new UsernamePasswordAuthenticationToken(username, password, user.getAuthorities());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(usernamePasswordAuthenticationToken);
         return jwtUtil.createToken(authentication);
     }
