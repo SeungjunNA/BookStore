@@ -32,10 +32,11 @@ function renderTodayBookData(data) {
 
     todayBookList.forEach(todayBook => {
         console.log(todayBook);
+        const bookDetailLink = `/book/bookDetail.html?bookId=${todayBook['id']}`;
         const todayBookHtml = `
             <div class="today-book-item">
                 <img src="${todayBook['thumbnailUrl']}"  alt="책 표지"/>
-                <p>${todayBook['title']}</p>
+                <p><a href="${bookDetailLink}">${todayBook['title']}</a></p>
             </div>
         `;
 
@@ -45,16 +46,18 @@ function renderTodayBookData(data) {
 
 function renderBestSellerData(data) {
     console.log("renderBestSellerData 호출");
+
     const bestSellerWrap = document.querySelector(".best-seller-wrap");
     const bestSellerList = getRandomSublist(data, 5);
     bestSellerWrap.innerHTML = '';
 
     bestSellerList.forEach(bestSeller => {
         console.log(bestSeller);
+        const bookDetailLink = `/book/bookDetail.html?bookId=${bestSeller['id']}`;
         const bestSellerHtml = `
             <div class="today-book-item">
                 <img src="${bestSeller['thumbnailUrl']}"  alt="책 표지"/>
-                <p>${bestSeller['title']}</p>
+                <p><a href="${bookDetailLink}">${bestSeller['title']}</a></p>
             </div>
         `;
 
