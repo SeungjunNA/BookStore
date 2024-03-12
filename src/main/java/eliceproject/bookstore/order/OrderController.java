@@ -2,11 +2,13 @@ package eliceproject.bookstore.order;
 
 import eliceproject.bookstore.order.dto.OrderDTO;
 import eliceproject.bookstore.order.dto.OrderRequest;
+import eliceproject.bookstore.user.User;
 import eliceproject.bookstore.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,9 +43,9 @@ public class OrderController {
     public ResponseEntity<List<OrderDTO>> getOrderListByUserId() {
         log.info("사용자별 주문 전체 조회");
 
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        Long userId = userService.findUserIdByUsername(username);
-        List<OrderDTO> orderDTOList = orderService.findByUserId(userId);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = (User) authentication.getPrincipal();
+        List<OrderDTO> orderDTOList = orderService.findByUserId(user.getId());
 
         return new ResponseEntity<>(orderDTOList, HttpStatus.OK);
     }
