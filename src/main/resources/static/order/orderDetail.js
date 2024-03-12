@@ -59,12 +59,13 @@ async function getOrderById(orderId) {
     let totalPrice = 0;
     orderBookList.forEach(book => {
         const subtotal = book['stock'] * book['book']['price'];
+        const bookDetailLink = `/book/bookDetail.html?bookId=${book['book']['id']}`;
         const orderDetailBookListHtml = `
             <div class="order-detail-book-item">
                 <div class="order-detail-book">
                     <img src=${book['book']['thumbnailUrl']} alt="책 표지 사진"/>
                     <div id="order-book-info">
-                        <p>${book['book']['title']}</p>
+                        <p><a href="${bookDetailLink}">${book['book']['title']}</a></p>
                         <span>수량: ${book['stock']}</span>
                     </div>
                 </div>
