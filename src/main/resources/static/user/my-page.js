@@ -1,3 +1,6 @@
+if(!localStorage.getItem("token")){
+    window.location.href = "../login/login.html"
+}
 document.addEventListener("DOMContentLoaded", function (){
     const jwtToken = localStorage.getItem("token");
     const orderList = document.getElementById("orderList");
