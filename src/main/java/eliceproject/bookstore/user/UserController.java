@@ -22,8 +22,6 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
-
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody @Valid UserDto userDto, BindingResult bindingResult) {

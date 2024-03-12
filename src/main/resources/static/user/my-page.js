@@ -45,7 +45,6 @@ document.addEventListener("DOMContentLoaded", function (){
             if (data && data.length > 0) {
                 displayOrderList(data);
             } else {
-                const orderList = document.getElementById("orderList");
                 orderList.textContent = '주문내역이 없습니다.';
                 orderList.style.textAlign = 'center';
             }
