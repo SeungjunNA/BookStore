@@ -69,6 +69,7 @@ function renderOrderListData(orderBookList) {
 
     orderBookList.forEach(order => {
         console.log("orderBook: " + order['id']);
+        let totalPrice = 0;
         const orderDetailLink = `/order/orderDetail.html?orderId=${order['id']}`;
         const orderBookHtml = `
             <div class="order-item-wrap">
@@ -81,18 +82,21 @@ function renderOrderListData(orderBookList) {
                     <div>
                         <img src="../images/book.png" alt="책 표지 사진"/>
                         <ul class="order-item-contents">
-                            ${order['orderBookList'].map(book => `
+                            ${order['orderBookList'].map(book => {
+                                const subtotal = book['book']['price'] * book['stock'];
+                                totalPrice += subtotal;
+                                return `
                                 <li>
                                     <p>${book['book']['title']}</p>
                                     <p>수량 : ${book['stock']}</p>
-                                </li>
-                            `).join('')}
+                                </li>`;
+                            }).join('')}
                         </ul>
                     </div>
                     <div>
                         <div class="order-item-price">
                             <p>총 결제 금액</p>
-                            <p>00,000원</p>
+                            <p>${totalPrice}</p>
                         </div>
                         <div class="order-item-deliver-wrap">
                             <p class="order-item-deliver-status">${order['orderStatus']}</p>
