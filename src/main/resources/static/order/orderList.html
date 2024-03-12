@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주문내역</title>
+    <!-- css -->
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/orderList.css">
+    <!-- js -->
+    <script src="orderList.js" type="module" defer></script>
+    <script src="../common/header.js" type="module" defer></script>
+</head>
+<body>
+<div class="header">
+    <a href="/">
+        <img class="logo" src="../images/logo.png" alt="로고"/>
+    </a>
+    <nav>
+        <ul>
+            <li><a href="#">장바구니</a></li>
+            <li><a href="#">마이페이지</a></li>
+            <li><a href="#">책읽는 엘리스</a></li>
+            <li>
+                <a href="#">
+                    <img class="user" src="../images/user.png" alt="유저"/>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</div>
+<div class="contents-wrap">
+    <div class="side">
+        <img class="profile" src="../images/profile.png" alt="프로필 사진" />
+        <p class="nickname">닉네임</p>
+        <button>회원정보 수정</button>
+    </div>
+    <div class="main">
+        <div class="order-result-wrap">
+            <div class="order-result-title">
+                <span>주문내역</span>
+            </div>
+            <div class="order-result-content">
+                <button type="button" class="order-result-preparing">
+                    <span class="order-result-preparing-count">0</span><br>
+                    <span>준비중</span>
+                </button>
+            </div>
+            <div class="order-result-content">
+                <button type="button" class="order-result-shipping">
+                    <span class="order-result-shipping-count">0</span><br>
+                    <span>배송중</span>
+                </button>
+            </div>
+            <div class="order-result-content">
+                <button type="button" class="order-result-deliver-completed">
+                    <span class="order-result-deliver-completed-count">0</span><br>
+                    <span>배송완료</span>
+                </button>
+            </div>
+        </div>
+        <div class="order-list-wrap"></div>
+    </div>
+</div>
+</body>
+</html>

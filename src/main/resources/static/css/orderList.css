@@ -1,0 +1,156 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.contents-wrap {
+    width: 100%;
+    display: flex;
+}
+
+/* 사이드 */
+
+.side {
+    width: 25%;
+    text-align: center;
+    padding: 50px 0;
+}
+
+.side .profile {
+    margin-bottom: 20px;
+}
+
+.side .nickname {
+    margin-bottom: 10px;
+}
+
+.side button {
+    background-color: white;
+    border: 1px solid #D9D9D9;;
+    border-radius: 5px;
+    padding: 5px 15px;
+}
+
+/* 메인 */
+
+.main {
+    width: 75%;
+    padding: 50px 40px 50px 50px;
+}
+
+.main .order-result-wrap {
+    border: 1px solid #D9D9D9;
+    border-radius: 10px;
+    padding: 30px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.order-result-title span {
+    color: #484848;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.order-result-content {
+    border-left: 1px solid #D9D9D9;
+    padding: 5px;
+}
+
+.order-result-content button {
+    background-color: transparent;
+    border: none;
+    text-align: start;
+}
+
+.order-item-wrap > span {
+    color: #484848;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-bottom: 1px solid black;
+}
+
+.order-item-meta-wrap {
+    display: flex;
+    align-items: center;
+    margin-top: 30px;
+}
+
+#order-item-number {
+    color: black;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+#order-item-detail {
+    color: #484848;
+    font-size: 13px;
+    font-weight: 400;
+    margin-left: 30px;
+    text-decoration: none;
+}
+
+#order-item-detail a {
+    text-decoration: none;
+    color: #484848;
+}
+
+.order-item-wrap {
+    border: 1px solid #D9D9D9;
+    border-radius: 10px;
+    padding: 30px;
+    margin-bottom: 20px;
+}
+
+.order-item-contents-wrap {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.order-item-contents-wrap > div {
+    display: flex;
+}
+
+.order-item-contents {
+    list-style-type: none;
+    margin-left: 20px;
+    font-size: 11px;
+    font-weight: 400;
+}
+
+.order-item-contents li {
+    margin-bottom: 10px;
+}
+
+.order-item-deliver-wrap {
+    margin-left: 20px;
+}
+
+.order-item-price {
+    color: black;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.order-item-deliver-wrap > button {
+    background-color: #B0C2FF;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.order-item-deliver-status {
+    color: black;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.order-item-deliver-status-date {
+    color: #484848;
+    font-size: 12px;
+    font-weight: 400;
+}
