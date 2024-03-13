@@ -28,6 +28,8 @@ document.addEventListener("DOMContentLoaded", function (){
     })
     .catch(error=>{
         console.log('유저 정보를 가져오는데 실패했습니다.', error);
+        localStorage.removeItem("token");
+        window.location.href = "/";
     });
 
     fetch('/api/order', {
@@ -55,89 +57,99 @@ document.addEventListener("DOMContentLoaded", function (){
 })
 function displayOrderList(data) {
     const orderListContainer = document.getElementById("orderList");
+    const orderToDetail = document.createElement("a");
+    const orderContainer = document.createElement("div");
+    const orderContent = document.createElement("div");
+    const orderPriceContainer = document.createElement("div");
+    orderContainer.style.display = "flex"
+    orderContainer.style.justifyContent = "space-between"
+    orderContainer.style.marginTop = "10px";
 
     orderListContainer.innerHTML = '';
 
+    let orderStatus;
+    let orderDate;
+    let orderBookStock = 0;
+    let totalAmount = 0;
     data.forEach(order => {
-        let totalAmount = 0;
-        const orderStatus = order.orderStatus;
-        const orderDate = order.orderDate;
-        let orderBookStock = 0;
+        orderStatus = order.orderStatus;
+        orderDate = order.orderDate;
 
-        const orderContainer = document.createElement("div");
         orderContainer.classList.add("order-number");
-
-        const orderContent = document.createElement("div");
         orderContent.classList.add("order-content");
 
         order.orderBookList.forEach(orderBook=>{
             orderBookStock += orderBook.stock;
 
             totalAmount += (orderBook.book.price * orderBook.stock);
-        })
-
-        order.orderBookList.forEach((orderBook) => {
-            const bookImage = document.createElement("img");
-            bookImage.src = "../images/book.png";
-            bookImage.alt = "책사진";
-
-            const orderDetail = document.createElement("div");
-            orderDetail.classList.add("order-detail");
-
-            const title = document.createElement("p");
-            title.style.fontWeight = "bold";
-            title.textContent = `[국내도서] ${orderBook.book.title}`; // Replace with the appropriate field in your OrderBook
-
-            const stock = document.createElement("p");
-            stock.textContent = `수량:${orderBook.stock}`; // Replace with the appropriate field in your OrderBook
-
-            orderDetail.appendChild(title);
-            orderDetail.appendChild(stock);
-
-            const etc = document.createElement("p");
-            // todo 주문한 책 수량
-            etc.textContent = orderBookStock - orderBook.stock === 0 ? "외 " + (totalAmount-orderBook.stock) + "권" : "";
-
-            const bookContainer = document.createElement("div");
-            bookContainer.style.display = "flex";
-            bookContainer.appendChild(bookImage);
-            bookContainer.appendChild(orderDetail);
-
-            orderContent.appendChild(bookContainer);
-            orderContent.appendChild(etc);
         });
-
-        const orderPrice = document.createElement("p");
-        orderPrice.style.marginRight = "40px";
-        orderPrice.style.marginTop = "40px";
-        orderPrice.style.fontSize = "15px";
-        orderPrice.textContent = `총 결제 금액 ${totalAmount}원`;
-
-        const orderStatusElement = document.createElement("div");
-        orderStatusElement.classList.add("order-status");
-
-        const orderStatusText = document.createElement("p");
-        orderStatusText.textContent = orderStatus;
-
-        const orderDateText = document.createElement("p");
-        orderDateText.style.fontSize = "10px";
-        orderDateText.style.color = "#484848";
-        orderDateText.textContent = `${orderDate} 배송 완료`;
-
-        const reviewButton = document.createElement("button");
-        reviewButton.type = "button";
-        reviewButton.textContent = "리뷰작성";
-
-        orderStatusElement.appendChild(orderStatusText);
-        orderStatusElement.appendChild(orderDateText);
-        orderStatusElement.appendChild(reviewButton);
-
-        orderContainer.appendChild(orderContent);
-        orderContainer.appendChild(orderPrice);
-        orderContainer.appendChild(orderStatusElement);
-
-        orderListContainer.appendChild(orderContainer);
     });
+    orderToDetail.textContent = "상세보기 >";
+    orderToDetail.href = "/order/orderList.html";
+    orderToDetail.style.textDecoration = "none";
+    orderToDetail.style.color = "#484848";
 
-    orderList.appendChild(table);
+    const bookImage = document.createElement("img");
+    bookImage.src = "../images/book.png";
+    bookImage.alt = "책사진";
+
+    const orderDetail = document.createElement("div");
+    orderDetail.classList.add("order-detail");
+
+    const title = document.createElement("p");
+    title.style.fontWeight = "bold";
+    title.textContent = `[국내도서] ${data[data.length-1].orderBookList[data[data.length-1].orderBookList.length-1].book.title}`;
+
+    const stock = document.createElement("p");
+    stock.textContent = `수량:${data[data.length-1].orderBookList[data[data.length-1].orderBookList.length-1].stock}`;
+
+    const etc = document.createElement("p");
+    etc.textContent = (orderBookStock - data[data.length-1].orderBookList[data[data.length-1].orderBookList.length-1].stock) !== 0 ? "외 " + (orderBookStock - data[data.length-1].orderBookList[data[data.length-1].orderBookList.length-1].stock) + "권" : "";
+    etc.style.marginTop = "40px"
+    orderDetail.appendChild(title);
+    orderDetail.appendChild(stock);
+    orderDetail.appendChild(etc);
+
+    const bookContainer = document.createElement("div");
+    bookContainer.style.display = "flex";
+    bookContainer.appendChild(bookImage);
+    bookContainer.appendChild(orderDetail);
+
+    orderContent.appendChild(bookContainer);
+
+    const orderPrice = document.createElement("p");
+    orderPrice.style.marginRight = "40px";
+    orderPrice.style.marginTop = "40px";
+    orderPrice.style.fontSize = "15px";
+    orderPrice.textContent = `총 결제 금액 ${totalAmount}원`;
+    orderPriceContainer.appendChild(orderPrice);
+
+    const orderStatusElement = document.createElement("div");
+    orderStatusElement.classList.add("order-status");
+
+    const orderStatusText = document.createElement("p");
+    orderStatusText.textContent = orderStatus;
+
+    const orderDateText = document.createElement("p");
+    orderDateText.style.fontSize = "10px";
+    orderDateText.style.color = "#484848";
+    orderDateText.textContent = `${orderDate} 배송 완료`;
+
+    const reviewButton = document.createElement("button");
+    reviewButton.type = "button";
+    reviewButton.textContent = "리뷰작성";
+
+    orderStatusElement.appendChild(orderStatusText);
+    orderStatusElement.appendChild(orderDateText);
+    orderStatusElement.appendChild(reviewButton);
+
+    orderContainer.appendChild(orderContent);
+    const orderPriceStatusContainer = document.createElement("div");
+    orderPriceStatusContainer.style.display = "flex";
+    orderPriceStatusContainer.appendChild(orderPriceContainer);
+    orderPriceStatusContainer.appendChild(orderStatusElement);
+    orderContainer.appendChild(orderPriceStatusContainer);
+
+    orderListContainer.appendChild(orderToDetail);
+    orderListContainer.appendChild(orderContainer);
 }
