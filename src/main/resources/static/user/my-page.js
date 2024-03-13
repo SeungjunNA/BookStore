@@ -28,6 +28,8 @@ document.addEventListener("DOMContentLoaded", function (){
     })
     .catch(error=>{
         console.log('유저 정보를 가져오는데 실패했습니다.', error);
+        localStorage.removeItem("token");
+        window.location.href = "/";
     });
 
     fetch('/api/order', {
@@ -55,11 +57,13 @@ document.addEventListener("DOMContentLoaded", function (){
 })
 function displayOrderList(data) {
     const orderListContainer = document.getElementById("orderList");
+    const orderToDetail = document.createElement("a");
     const orderContainer = document.createElement("div");
     const orderContent = document.createElement("div");
     const orderPriceContainer = document.createElement("div");
     orderContainer.style.display = "flex"
     orderContainer.style.justifyContent = "space-between"
+    orderContainer.style.marginTop = "10px";
 
     orderListContainer.innerHTML = '';
 
@@ -80,6 +84,11 @@ function displayOrderList(data) {
             totalAmount += (orderBook.book.price * orderBook.stock);
         });
     });
+    orderToDetail.textContent = "상세보기 >";
+    orderToDetail.href = "/order/orderList.html";
+    orderToDetail.style.textDecoration = "none";
+    orderToDetail.style.color = "#484848";
+
     const bookImage = document.createElement("img");
     bookImage.src = "../images/book.png";
     bookImage.alt = "책사진";
@@ -141,5 +150,6 @@ function displayOrderList(data) {
     orderPriceStatusContainer.appendChild(orderStatusElement);
     orderContainer.appendChild(orderPriceStatusContainer);
 
+    orderListContainer.appendChild(orderToDetail);
     orderListContainer.appendChild(orderContainer);
 }
