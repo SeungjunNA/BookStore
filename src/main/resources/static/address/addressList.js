@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    getAllAddress();
+    getAllAddressByUser();
     setEventListeners();
 });
 
@@ -21,10 +21,32 @@ function getDefaultAddress(defaultAddress) {
     defaultAddressWrap.insertAdjacentHTML('beforeend', defaultAddressHtml);
 }
 
-async function getAllAddress() {
+async function getAllAddressByUser() {
+    console.log("getAllAddressByUser 메소드 호출");
+
     let defaultAddress;
-    const response = await fetch("/api/address");
-    const addressList = await response.json();
+    const jwtToken = localStorage.getItem("token");
+    const headers = {
+        'Content-Type': 'application/json'
+    };
+    if (jwtToken !== null){
+        headers['Authorization'] = jwtToken;
+    }
+
+    const response = await fetch("/api/address", {headers});
+    if (response.ok) {
+        const addressList = await response.json();
+        console.log("주소지 조회에 성공했습니다.");
+        renderAllAddressByUser(addressList);
+        setDefaultAddress();
+        deleteAddress();
+        updateAddressListeners();
+    } else {
+        console.error("주소지 조회에 실패했습니다.");
+    }
+}
+
+function renderAllAddressByUser(addressList) {
     const addressListWrap = document.querySelector('.address-list-wrap');
     addressListWrap.innerHTML = '';
 
@@ -59,18 +81,16 @@ async function getAllAddress() {
             </div>
         `
         addressListWrap.insertAdjacentHTML('beforeend', addressItemHtml);
-    })
+    });
 
     getDefaultAddress(defaultAddress);
-    setDefaultAddress();
-    deleteAddress();
-    updateAddressListeners();
 }
 
 
 const editModal = document.querySelector('.edit-modal');
 const editCloseBtn = document.querySelector('.edit-close');
 const editSubmitBtn = document.querySelector('.edit-submit');
+
 editCloseBtn.addEventListener('click', () => {
     editModal.style.display = "none";
 });
