@@ -107,10 +107,6 @@ function displayOrderList(data) {
     orderToDetail.style.textDecoration = "none";
     orderToDetail.style.color = "#484848";
 
-    const bookImage = document.createElement("img");
-    bookImage.src = "../images/book.png";
-    bookImage.alt = "책사진";
-
     const orderDetail = document.createElement("div");
     orderDetail.classList.add("order-detail");
 
@@ -130,7 +126,6 @@ function displayOrderList(data) {
 
     const bookContainer = document.createElement("div");
     bookContainer.style.display = "flex";
-    bookContainer.appendChild(bookImage);
     bookContainer.appendChild(orderDetail);
 
     orderContent.appendChild(bookContainer);

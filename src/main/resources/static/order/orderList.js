@@ -114,7 +114,6 @@ function renderOrderListData(orderBookList) {
                 </div>
                 <div class="order-item-contents-wrap">
                     <div>
-                        <img src="../images/book.png" alt="책 표지 사진"/>
                         <ul class="order-item-contents">
                             ${order['orderBookList'].map(book => {
                                 const subtotal = book['book']['price'] * book['stock'];

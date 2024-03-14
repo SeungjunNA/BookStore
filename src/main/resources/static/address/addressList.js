@@ -100,6 +100,7 @@ function renderAllAddressByUser(addressList) {
                     <span>${address['phoneNumber']}</span><br>
                     [<span>${address['zipCode']}</span>]
                     <span>${address['mainAddress']}</span>
+                    <span> ${address['subAddress']}</span>
                 </div>
                 <div class="address-item-button-wrap">
                     ${defaultAddressBtn}
