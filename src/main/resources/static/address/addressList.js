@@ -23,7 +23,7 @@ function getDefaultAddress(defaultAddress) {
 
 async function getAllAddress() {
     let defaultAddress;
-    const response = await fetch("/myroom/address");
+    const response = await fetch("/api/address");
     const addressList = await response.json();
     const addressListWrap = document.querySelector('.address-list-wrap');
     addressListWrap.innerHTML = '';
@@ -93,7 +93,7 @@ editSubmitBtn.addEventListener('click', () => {
 });
 
 async function updateAddress(addressId, editAddress) {
-    const response = await fetch(`/myroom/address/${addressId}`, {
+    const response = await fetch(`/api/address/${addressId}`, {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json"
@@ -121,7 +121,7 @@ async function updateAddressListeners(){
 }
 
 async function addAddress(address){
-    const response = await fetch("/myroom/address", {
+    const response = await fetch("/api/address", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -141,7 +141,7 @@ async function setDefaultAddress() {
             const addressIdElement = button.closest('.address-item-wrap').querySelector('#address-id');
             const addressId = addressIdElement.textContent;
 
-            const response = await fetch(`/myroom/address/${addressId}/default`, {
+            const response = await fetch(`/api/address/${addressId}/default`, {
                 method: 'PUT',
             });
 
@@ -166,7 +166,7 @@ async function deleteAddress() {
             const addressIdElement = button.closest('.address-item-wrap').querySelector('#address-id');
             const addressId = addressIdElement.textContent;
 
-            const response = await fetch(`/myroom/address/${addressId}`, {
+            const response = await fetch(`/api/address/${addressId}`, {
                 method: 'DELETE',
             });
 
