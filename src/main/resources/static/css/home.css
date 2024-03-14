@@ -71,5 +71,11 @@
 }
 
 .book-list-title {
-    text-align: center;
+    text-align: start;
+    margin:  20px 0;
+}
+
+.book-list-title a {
+    text-decoration: none; /* 밑줄 제거 */
+    color: black;
 }
