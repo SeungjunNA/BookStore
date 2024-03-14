@@ -107,6 +107,54 @@ function renderAllAddressByUser(addressList) {
     });
 }
 
+async function addAddress(address){
+    console.log("addAddress 메소드 호출");
+
+    const jwtToken = localStorage.getItem("token");
+    const headers = {
+        'Content-Type': 'application/json'
+    };
+    if (jwtToken !== null){
+        headers['Authorization'] = jwtToken;
+    }
+
+    const response = await fetch("/api/address", {method: 'POST', headers, body: JSON.stringify(address)});
+    if (response.ok) {
+        const createdAddress = await response.json();
+        console.log("주소지가 생성되었습니다:", createdAddress);
+    } else {
+        console.error("주소지 생성에 실패했습니다.");
+    }
+
+    getAllAddressByUser();
+}
+
+async function deleteAddress() {
+    const deleteButtons = document.querySelectorAll(".delete-address-btn");
+    deleteButtons.forEach(button => {
+        button.addEventListener('click', async () => {
+            const addressIdElement = button.closest('.address-item-wrap').querySelector('#address-id');
+            const addressId = addressIdElement.textContent;
+
+            const jwtToken = localStorage.getItem("token");
+            const headers = {
+                'Content-Type': 'application/json'
+            };
+            if (jwtToken !== null){
+                headers['Authorization'] = jwtToken;
+            }
+
+            const response = await fetch(`/api/address/${addressId}`, {method: 'DELETE', headers});
+            if (response.ok) {
+                console.log("주소지 삭제 성공");
+            } else {
+                console.error("주소지 삭제 실패");
+            }
+
+            getAllAddressByUser();
+        });
+    });
+}
 
 const editModal = document.querySelector('.edit-modal');
 const editCloseBtn = document.querySelector('.edit-close');
@@ -161,27 +209,7 @@ async function updateAddressListeners(){
     });
 }
 
-async function addAddress(address){
-    console.log("addAddress 메소드 호출");
 
-    const jwtToken = localStorage.getItem("token");
-    const headers = {
-        'Content-Type': 'application/json'
-    };
-    if (jwtToken !== null){
-        headers['Authorization'] = jwtToken;
-    }
-
-    const response = await fetch("/api/address", {method: 'POST', headers, body: JSON.stringify(address)});
-    if (response.ok) {
-        const createdAddress = await response.json();
-        console.log("주소지가 생성되었습니다:", createdAddress);
-    } else {
-        console.error("주소지 생성에 실패했습니다.");
-    }
-
-    getAllAddressByUser();
-}
 
 async function setDefaultAddress() {
     const setDefaultAddressButtons = document.querySelectorAll(".set-default-address-btn");
@@ -207,32 +235,7 @@ async function setDefaultAddress() {
 }
 
 
-async function deleteAddress() {
-    const deleteButtons = document.querySelectorAll(".delete-address-btn");
-    deleteButtons.forEach(button => {
-        button.addEventListener('click', async () => {
-            const addressIdElement = button.closest('.address-item-wrap').querySelector('#address-id');
-            const addressId = addressIdElement.textContent;
 
-            const jwtToken = localStorage.getItem("token");
-            const headers = {
-                'Content-Type': 'application/json'
-            };
-            if (jwtToken !== null){
-                headers['Authorization'] = jwtToken;
-            }
-
-            const response = await fetch(`/api/address/${addressId}`, {method: 'DELETE', headers});
-            if (response.ok) {
-                console.log("주소지 삭제 성공");
-            } else {
-                console.error("주소지 삭제 실패");
-            }
-
-            getAllAddressByUser();
-        });
-    });
-}
 
 function setEventListeners() {
 
