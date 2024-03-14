@@ -97,6 +97,8 @@ public class AddressController {
     /* 주소시 삭제 */
     @DeleteMapping("/{addressId}")
     public ResponseEntity<Object> deleteAddress(@PathVariable Long addressId) throws ResourceNotFoundException {
+        log.info("주소시 삭제");
+
         addressRepository.findById(addressId)
                         .orElseThrow(() -> new ResourceNotFoundException("Address not found with id : " + addressId));
         addressService.delete(addressId);

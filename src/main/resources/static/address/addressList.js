@@ -1,10 +1,34 @@
 document.addEventListener('DOMContentLoaded', () => {
     getAllAddressByUser();
+    getDefaultAddress();
     setEventListeners();
 });
 
-function getDefaultAddress(defaultAddress) {
-    const defaultAddressWrap = document.querySelector('.default-address-wrap');
+async function getDefaultAddress() {
+    console.log("getDefaultAddress 메소드 호출");
+
+    const jwtToken = localStorage.getItem("token");
+    const headers = {
+        'Content-Type': 'application/json'
+    };
+    if (jwtToken !== null){
+        headers['Authorization'] = jwtToken;
+    }
+
+    const response = await fetch("/api/address/default", {headers});
+    if (response.ok) {
+        const defaultAddress = await response.json();
+        console.log("기본 주소지 조회에 성공했습니다.");
+        renderDefaultAddress(defaultAddress);
+    } else {
+        console.error("기본 주소지 조회에 실패했습니다.");
+    }
+}
+
+function renderDefaultAddress(defaultAddress) {
+    console.log("renderDefaultAddress 메소드 호출");
+
+    const defaultAddressWrap = document.querySelector(".default-address-wrap");
     defaultAddressWrap.innerHTML = '';
 
     const defaultAddressHtml = `
@@ -17,14 +41,12 @@ function getDefaultAddress(defaultAddress) {
             <span>${defaultAddress['mainAddress']}</span>
         </div>
     `
-
     defaultAddressWrap.insertAdjacentHTML('beforeend', defaultAddressHtml);
 }
 
 async function getAllAddressByUser() {
     console.log("getAllAddressByUser 메소드 호출");
 
-    let defaultAddress;
     const jwtToken = localStorage.getItem("token");
     const headers = {
         'Content-Type': 'application/json'
@@ -38,12 +60,13 @@ async function getAllAddressByUser() {
         const addressList = await response.json();
         console.log("주소지 조회에 성공했습니다.");
         renderAllAddressByUser(addressList);
-        setDefaultAddress();
-        deleteAddress();
-        updateAddressListeners();
     } else {
         console.error("주소지 조회에 실패했습니다.");
     }
+
+    setDefaultAddress();
+    updateAddressListeners();
+    deleteAddress();
 }
 
 function renderAllAddressByUser(addressList) {
@@ -82,8 +105,6 @@ function renderAllAddressByUser(addressList) {
         `
         addressListWrap.insertAdjacentHTML('beforeend', addressItemHtml);
     });
-
-    getDefaultAddress(defaultAddress);
 }
 
 
@@ -123,7 +144,7 @@ async function updateAddress(addressId, editAddress) {
 
     const findAddress = await response.json();
     console.log(findAddress.addressName);
-    getAllAddress();
+    getAllAddressByUser();
 }
 
 
@@ -159,7 +180,7 @@ async function addAddress(address){
         console.error("주소지 생성에 실패했습니다.");
     }
 
-    getAllAddress();
+    getAllAddressByUser();
 }
 
 async function setDefaultAddress() {
@@ -180,7 +201,7 @@ async function setDefaultAddress() {
                 console.error("기본 주소지 설정 실패:", response.statusText);
             }
 
-            getAllAddress();
+            getAllAddressByUser();
         });
     });
 }
@@ -188,23 +209,27 @@ async function setDefaultAddress() {
 
 async function deleteAddress() {
     const deleteButtons = document.querySelectorAll(".delete-address-btn");
-
     deleteButtons.forEach(button => {
         button.addEventListener('click', async () => {
             const addressIdElement = button.closest('.address-item-wrap').querySelector('#address-id');
             const addressId = addressIdElement.textContent;
 
-            const response = await fetch(`/api/address/${addressId}`, {
-                method: 'DELETE',
-            });
+            const jwtToken = localStorage.getItem("token");
+            const headers = {
+                'Content-Type': 'application/json'
+            };
+            if (jwtToken !== null){
+                headers['Authorization'] = jwtToken;
+            }
 
+            const response = await fetch(`/api/address/${addressId}`, {method: 'DELETE', headers});
             if (response.ok) {
                 console.log("주소지 삭제 성공");
             } else {
                 console.error("주소지 삭제 실패");
             }
 
-            getAllAddress();
+            getAllAddressByUser();
         });
     });
 }
