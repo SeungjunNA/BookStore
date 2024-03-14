@@ -46,7 +46,10 @@ function displayBooks(page) {
             <img src="${book.thumbnailUrl}" alt="${book.title}" class="thumbnail">
             <div class="book-item-info-wrap">
                 <h3><a href="${bookDetailLink}">${book.title}</a></h3>
+                <p>${book.contents}</p>
                 <p>작가: ${book.writer}</p>
+                <p>출판사: ${book.publisher}</p>
+                <p>가격: ${book.price}</p>
             </div>
         `;
         bookList.appendChild(bookItem);
