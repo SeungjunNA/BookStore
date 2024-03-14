@@ -56,6 +56,8 @@ public class Address {
         String newAddressName = addressDTO.getAddressName();
         String newMainAddress = addressDTO.getMainAddress();
         String newSubAddress = addressDTO.getSubAddress();
+        String newPhoneNumber = addressDTO.getPhoneNumber();
+        Integer newZipCode = addressDTO.getZipCode();
         boolean newIsDefault = addressDTO.isDefault();
 
         if (newAddressName != null && !newAddressName.isBlank()) {
@@ -66,6 +68,12 @@ public class Address {
         }
         if (newSubAddress != null && !newSubAddress.isBlank()) {
             this.subAddress = newSubAddress;
+        }
+        if (newPhoneNumber != null && !newPhoneNumber.isBlank()) {
+            this.phoneNumber = newPhoneNumber;
+        }
+        if (newZipCode != null) {
+            this.zipCode = newZipCode;
         }
         if (newIsDefault) {
             setDefault();

@@ -91,6 +91,8 @@ public class AddressController {
     /* 주소시 수정 */
     @PatchMapping("/{addressId}")
     public ResponseEntity<Address> updateAddress(@PathVariable Long addressId, @RequestBody AddressDTO addressDTO) throws Exception {
+        log.info("주소시 수정");
+
         Address updateAddress = addressService.update(addressId, addressDTO);
         if (updateAddress == null) {
             throw new Exception("주소지 수정에 실패했습니다.");

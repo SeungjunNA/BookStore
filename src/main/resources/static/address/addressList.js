@@ -201,7 +201,7 @@ editCloseBtn.addEventListener('click', () => {
 });
 
 editSubmitBtn.addEventListener('click', () => {
-    console.log("edit-submit");
+    console.log("edit-submit 버튼");
 
     const editAddress = {
         addressName: document.getElementById("editAddressName").value,
@@ -213,21 +213,29 @@ editSubmitBtn.addEventListener('click', () => {
     console.log(editAddress);
 
     updateAddress(editAddressId, editAddress);
-
     editModal.style.display = "none";
 });
 
 async function updateAddress(addressId, editAddress) {
-    const response = await fetch(`/api/address/${addressId}`, {
-        method: "PATCH",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(editAddress)
-    })
+    console.log("updateAddress 메소드 호출");
 
+    const jwtToken = localStorage.getItem("token");
+    const headers = {
+        'Content-Type': 'application/json'
+    };
+    if (jwtToken !== null){
+        headers['Authorization'] = jwtToken;
+    }
+
+    const response = await fetch(`/api/address/${addressId}`, {method: 'PATCH', headers: headers, body: JSON.stringify(editAddress)});
+    if (response.ok) {
+        console.log("주소지 수정 성공:");
+    } else {
+        console.error("주소지 수정 실패:");
+    }
     const findAddress = await response.json();
     console.log(findAddress.addressName);
+
     getAllAddressByUser();
 }
 
@@ -244,13 +252,6 @@ async function updateAddressListeners(){
         });
     });
 }
-
-
-
-
-
-
-
 
 function setEventListeners() {
 
