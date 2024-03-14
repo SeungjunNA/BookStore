@@ -11,9 +11,11 @@ async function getBook() {
 
 async function displayBookDetails(bookId) {
     const book = await fetchBookById(bookId);
+    console.log("book: " + book.contents);
 
     updateElementTextContent(".book-detail-title", book.title);
-    updateElementTextContent(".book-detail-sub-title", book.subTitle);
+    updateElementTextContent(".book-detail-contents", book.contents);
+    updateElementTextContent(".book-detail-writer", book.writer);
     updateElementTextContent(".book-detail-publisher", book.publisher);
     updateElementTextContent(".book-detail-price", `${book.price}원`);
 
