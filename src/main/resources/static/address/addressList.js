@@ -16,10 +16,16 @@ async function getDefaultAddress() {
     }
 
     const response = await fetch("/api/address/default", {headers});
+    const responseData = await response.json();
+
+    if (!responseData) {
+        console.log("기본 주소지가 없습니다.");
+        return;
+    }
+
     if (response.ok) {
-        const defaultAddress = await response.json();
         console.log("기본 주소지 조회에 성공했습니다.");
-        renderDefaultAddress(defaultAddress);
+        renderDefaultAddress(responseData);
     } else {
         console.error("기본 주소지 조회에 실패했습니다.");
     }
@@ -78,7 +84,6 @@ function renderAllAddressByUser(addressList) {
         let defaultAddressBtn;
 
         if (address['default'] === true) {
-            defaultAddress = address;
             isDefaultSpan = '| <span>기본배송지</span>';
             defaultAddressBtn = '';
         } else {
@@ -156,6 +161,37 @@ async function deleteAddress() {
     });
 }
 
+async function setDefaultAddress() {
+    console.log("setDefaultAddress 메소드 호출");
+
+    const setDefaultAddressButtons = document.querySelectorAll(".set-default-address-btn");
+    setDefaultAddressButtons.forEach(button => {
+        button.addEventListener('click', async () => {
+            const addressIdElement = button.closest('.address-item-wrap').querySelector('#address-id');
+            const addressId = addressIdElement.textContent;
+
+            const jwtToken = localStorage.getItem("token");
+            const headers = {
+                'Content-Type': 'application/json'
+            };
+            if (jwtToken !== null){
+                headers['Authorization'] = jwtToken;
+            }
+
+            const response = await fetch(`/api/address/${addressId}/default`, {method: 'PUT', headers: headers});
+            if (response.ok) {
+                const defaultAddress = await response.json();
+                console.log("기본 주소지 설정 성공:", defaultAddress);
+                getDefaultAddress();
+            } else {
+                console.error("기본 주소지 설정 실패:", response.statusText);
+            }
+
+            getAllAddressByUser();
+        });
+    });
+}
+
 const editModal = document.querySelector('.edit-modal');
 const editCloseBtn = document.querySelector('.edit-close');
 const editSubmitBtn = document.querySelector('.edit-submit');
@@ -211,28 +247,7 @@ async function updateAddressListeners(){
 
 
 
-async function setDefaultAddress() {
-    const setDefaultAddressButtons = document.querySelectorAll(".set-default-address-btn");
-    setDefaultAddressButtons.forEach(button => {
-        button.addEventListener('click', async () => {
-            const addressIdElement = button.closest('.address-item-wrap').querySelector('#address-id');
-            const addressId = addressIdElement.textContent;
 
-            const response = await fetch(`/api/address/${addressId}/default`, {
-                method: 'PUT',
-            });
-
-            if (response.ok) {
-                const defaultAddress = await response.json();
-                console.log("기본 주소지 설정 성공:", defaultAddress);
-            } else {
-                console.error("기본 주소지 설정 실패:", response.statusText);
-            }
-
-            getAllAddressByUser();
-        });
-    });
-}
 
 
 

@@ -75,8 +75,12 @@ public class AddressController {
     /* 기본 주소지 설정 */
     @PutMapping("/{addressId}/default")
     public ResponseEntity<Address> setDefaultAddress(@PathVariable Long addressId) throws Exception {
-        Long userId = 1L;
+        log.info("기본 주소지 설정");
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Long userId = userService.findUserIdByUsername(username);
         addressService.setDefault(userId, addressId);
+
         Address defaultAddress = addressService.findById(addressId);
         if (defaultAddress == null) {
             throw new Exception("기본 주소지 설정에 실패했습니다.");
