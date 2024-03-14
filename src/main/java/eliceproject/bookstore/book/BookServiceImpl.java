@@ -22,7 +22,6 @@ public class BookServiceImpl implements BookService{
     @Transactional(readOnly = true)
     @Override
     public Book findById(Long id) {
-        Book book = BookRepository.findById(id).orElseThrow();
-        return book;
+        return BookRepository.findById(id).orElseThrow();
     }
 }
