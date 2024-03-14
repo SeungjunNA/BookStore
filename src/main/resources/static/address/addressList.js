@@ -1,8 +1,38 @@
 document.addEventListener('DOMContentLoaded', () => {
+    getUser();
     getAllAddressByUser();
     getDefaultAddress();
     setEventListeners();
 });
+
+async function getUser() {
+    const jwtToken = localStorage.getItem("token");
+    const headers = {
+        'Content-Type': 'application/json'
+    };
+    if (jwtToken !== null){
+        headers['Authorization'] = jwtToken;
+    }
+
+    const nickname = document.querySelector(".nickname");
+    console.log("nickname: " + nickname);
+    fetch('/user', {
+        method: 'GET',
+        headers: headers
+    })
+        .then(response=>{
+            if(!response.ok){
+                throw new Error('유저 정보를 가져오는데 실패했습니다.');
+            }
+            return response.json();
+        })
+        .then(data=>{
+            nickname.textContent = data.name;
+        })
+        .catch(error=>{
+            console.log('유저 정보를 가져오는데 실패했습니다.', error);
+        })
+}
 
 async function getDefaultAddress() {
     console.log("getDefaultAddress 메소드 호출");
