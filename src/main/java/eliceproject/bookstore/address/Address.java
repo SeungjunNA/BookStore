@@ -80,6 +80,10 @@ public class Address {
         this.isDefault = false;
     }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     @Override
     public String toString() {
         return "Address{" +

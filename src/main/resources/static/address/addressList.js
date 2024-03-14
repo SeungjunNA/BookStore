@@ -121,16 +121,24 @@ async function updateAddressListeners(){
 }
 
 async function addAddress(address){
-    const response = await fetch("/api/address", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(address)
-    })
+    console.log("addAddress 메소드 호출");
 
-    const createdAddress = await response.json();
-    console.log(createdAddress.addressName);
+    const jwtToken = localStorage.getItem("token");
+    const headers = {
+        'Content-Type': 'application/json'
+    };
+    if (jwtToken !== null){
+        headers['Authorization'] = jwtToken;
+    }
+
+    const response = await fetch("/api/address", {method: 'POST', headers, body: JSON.stringify(address)});
+    if (response.ok) {
+        const createdAddress = await response.json();
+        console.log("주소지가 생성되었습니다:", createdAddress);
+    } else {
+        console.error("주소지 생성에 실패했습니다.");
+    }
+
     getAllAddress();
 }
 
